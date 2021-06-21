@@ -10,8 +10,9 @@
 			<div class="card">
 
 				<div class="card-header">
-					<button type="button" class="btn btn-warning mx-3">Reload</button>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#addIncidentModal" class="btn btn-success">Add</button>
+					Manage Incident
+					<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
+					<button type="button" data-bs-toggle="modal" data-bs-target="#addIncidentModal" class="btn btn-success float-end">Add</button>
 				</div>
 				<div class="card-body">
 					<table class="table display responsive nowrap" id="incidentTable" style="width: 100%">
