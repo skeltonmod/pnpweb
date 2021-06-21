@@ -1,0 +1,42 @@
+.nav-link{
+	background-color: #dc3545 !important;;
+	border: none;
+	color: white;
+}
+
+.nav-link a{
+	background-color: #dc3545 !important;
+	border: none;
+	color: white;
+}
+
+
+.nav-menu:hover{
+	background-color: white;
+}
+
+.nav-menu:hover a{
+	background-color: white;
+	color: #dc3545 !important;
+	text-decoration: none;
+}
+
+.col-no{
+	width:80px;
+	padding: 10px;
+}
+
+.col-date{
+	width: 120px;
+	padding: 10px;
+}
+
+.col-lat-long{
+	width: 140px;
+	padding: 10px;
+}
+
+.col-remarks{
+	width: 150px;
+	padding: 10px;
+}
