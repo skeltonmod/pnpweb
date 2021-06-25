@@ -64,24 +64,31 @@
 								</div>
 
 								<div class="mb-3">
+									<label> Incident Suspect </label>
 									<input type="text" class="form-control" name="suspect" id="suspect" placeholder="Suspect" />
 								</div>
 								<div class="mb-3">
+									<label> Incident Victim </label>
 									<input type="text" class="form-control" name="victim" id="victim" placeholder="Victim" />
 								</div>
 								<div class="mb-3">
+									<label> Incident Remarks </label>
 									<input type="text" class="form-control input-sm" name="remarks" id="remarks" placeholder="Remarks" />
 								</div>
 								<div class="mb-3">
+									<label> Incident Latitude </label>
 									<input type="text" class="form-control input-sm" name="latitude" id="latitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
+									<label> Incident Longitude </label>
 									<input type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude"/>
 								</div>
 								<div class="mb-3">
+									<label> Incident Location </label>
 									<input type="text" class="form-control" name="location" id="location" placeholder="Location"/>
 								</div>
 								<div class="mb-3">
+									<label> Incident Image </label>
 									<img src="../../incident_images/no_image.png" id="img_save_preview" width="120" height="120">
 									<input type="file" onchange="getImage(this, 'add')" id="file_save_img" name="file_save_img"/>
 								</div>
@@ -107,15 +114,12 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col">
-							<iframe src="../../map.html" id="mapframe" width="470" height="320" seamless></iframe>
-						</div>
-					</div>
-					<div class="row">
 
 						<!-- Other half of the modal-body div-->
 						<div class="col">
 							<form id='frmEditIncident' >
+								<iframe src="../../map.html" id="mapframe" width="470" height="320" seamless></iframe>
+
 								<div class="mb-3">
 									<label> Incident Date </label>
 									<input type="date" class="form-control" name="incident_date" id="edit_incident_date"/>
@@ -126,28 +130,23 @@
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="suspect" id="edit_suspect" placeholder="Suspect" />
+									<label for="edit_suspect">Suspect</label><input type="text" class="form-control" name="suspect" id="edit_suspect" placeholder="Suspect" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control" name="victim" id="edit_victim" placeholder="Victim" />
+									<label for="edit_victim">Victim</label><input type="text" class="form-control" name="victim" id="edit_victim" placeholder="Victim" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" />
+									<label for="edit_remarks">Victim</label><input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="latitude" id="edit_latitude" placeholder="Latitude" />
+									<label for="edit_latitude">Latitude</label><input type="text" class="form-control input-sm" name="latitude" id="edit_latitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control" name="longitude" id="edit_longitude" placeholder="Longitude"/>
+									<label for="edit_longitude">Longitude</label><input type="text" class="form-control" name="longitude" id="edit_longitude" placeholder="Longitude"/>
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control" name="location" id="edit_location" placeholder="Location"/>
+									<label for="edit_location">Location</label><input type="text" class="form-control" name="location" id="edit_location" placeholder="Location"/>
 								</div>
-<!--								<div class="form-group">-->
-<!--									<img src="../../incident_images/no_image.png" id="edit_img_save_preview" width="120" height="120">-->
-<!--									<input type="file" onchange="getImage(this, 'edit')" id="edit_file_save_img" name="file_save_img"/>-->
-<!--								</div>-->
-
 							</form>
 						</div>
 					</div>
@@ -199,9 +198,9 @@
 	})
 
 	function getBarangay(location, lat, long){
-		$("#latitude").val(lat)
-		$("#longitude").val(long)
-		$("#location").val(location)
+		$("[name='latitude']").val(lat)
+		$("[name='longitude']").val(long)
+		$("[name='location']").val(location)
 	}
 
 	$("#addBtn").on("click", function (e){
@@ -252,6 +251,11 @@
 			success: function (response){
 				console.log(response)
 				alert("Incident Edited Successfully")
+			},
+
+			complete: function (e){
+				$("#incidentTable").DataTable().ajax.reload()
+				alert("Record Edited Successfully")
 			}
 
 		})
@@ -280,7 +284,6 @@
 						$("#edit_latitude").val(data.latitude)
 						$("#edit_longitude").val(data.longitude)
 						$("#edit_location").val(data.location)
-						//$("#edit_img_save_preview").attr('src',`<?php //echo base_url('incident_images')?>///${data.picture}`)
 						$("#saveBtn").attr('name', data.incident_no)
 
 						break;
@@ -292,6 +295,9 @@
 
 
 
+			},
+			complete: function (e){
+				$("#incidentTable").DataTable().ajax.reload()
 			}
 
 		})

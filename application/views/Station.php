@@ -178,6 +178,7 @@
 			},
 			complete: function (e){
 				$("#stationTable").DataTable().ajax.reload()
+
 			}
 		})
 	}
@@ -215,9 +216,9 @@
 			data: formData,
 			success: function (response){
 				console.log(response)
-				alert("Station Edited Successfully")
 			}, complete: function (e){
 				$("#stationTable").DataTable().ajax.reload()
+				alert("Record Edited Successfully")
 			}
 
 		})

@@ -175,7 +175,7 @@
 	})
 
 	$(document).ready(function (){
-		$("#personnelTable").dataTable({
+		$("#personnelTable").DataTable({
 			lengthChange: true,
 			"paging": true,
 			"processing": true,
@@ -190,7 +190,7 @@
 				{data: "name"},
 				{data: "address"},
 				{data: "dob"},
-				{data: "id",
+				{data: 'id',
 					render: function (data){
 						return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" class="btn btn-success">Edit</button>
 								<button type="button" onclick="manageData(${data}, 'delete')" class="btn btn-danger">Remove</button>`;
@@ -217,12 +217,17 @@
 			},
 			complete: function (e){
 				$("#personnelTable").DataTable().ajax.reload()
+				alert("Record Edited Successfully")
 			}
 
 		})
 	})
-	function manageData(id, key){
-
+	function manageData(id, key, element){
+		if(key === "delete"){
+			if(!confirm(`Are you sure you want to delete ${id}`)){
+				return
+			}
+		}
 		$.ajax({
 			url: `<?php echo site_url()?>/main/manage_personnel`,
 			method: 'post',
@@ -242,14 +247,14 @@
 						$("#editdob ").val(data.dob)
 						$("#saveBtn").attr('name', data.personnel_id)
 						break;
-					case "delete":
-						alert("Deleted!")
-						break;
 
 				}
 			},
 			complete: function (e){
 				$("#personnelTable").DataTable().ajax.reload()
+				if(key === 'delete'){
+					alert('Delete Success')
+				}
 			}
 
 
