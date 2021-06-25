@@ -54,38 +54,52 @@
 							<form id='frmBarangay'>
 								<div class="mb-3">
 									<label>
-										<select name="station_id" id="station_id"  class="form-select">
-											<option value="1">Station 1</option>
-											<option value="2">Station 2</option>
-											<option value="3">Station 3</option>
-											<option value="4">Station 4</option>
-											<option value="5">Station 5</option>
-											<option value="6">Station 6</option>
-											<option value="7">Station 7</option>
-											<option value="8">Station 8</option>
-											<option value="9">Station 9</option>
-											<option value="10">Station 10</option>
-										</select>
+										Station ID
 									</label>
+									<select name="station_id" id="station_id"  class="form-select">
+										<option value="1">Station 1</option>
+										<option value="2">Station 2</option>
+										<option value="3">Station 3</option>
+										<option value="4">Station 4</option>
+										<option value="5">Station 5</option>
+										<option value="6">Station 6</option>
+										<option value="7">Station 7</option>
+										<option value="8">Station 8</option>
+										<option value="9">Station 9</option>
+										<option value="10">Station 10</option>
+									</select>
 								</div>
 
 								<div class="mb-3">
+									<label>
+										Barangay Name
+									</label>
 									<input type="text" class="form-control" name="barangay_name" id="barangay_name" placeholder="Barangay Name" />
 								</div>
 
-
-
 								<div class="mb-3">
+									<label>
+										Canonical Name
+									</label>
 									<input type="text" class="form-control" name="canonical_name" id="location" placeholder="Canonical Name" />
 								</div>
 
 								<div class="mb-3">
+									<label>
+										Latitude
+									</label>
 									<input type="text" class="form-control input-sm" name="lat" id="latitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
+									<label>
+										Longitude
+									</label>
 									<input type="text" class="form-control input-sm" name="long" id="longitude" placeholder="Longitude" />
 								</div>
 								<div class="mb-3">
+									<label>
+										Remarks
+									</label>
 									<input type="text" class="form-control input-sm" name="remarks" id="remarks" placeholder="Remarks" />
 								</div>
 
@@ -117,36 +131,52 @@
 							<form id='frmEditBarangay'>
 								<div class="mb-3">
 									<label>
-										<select name="station_id" id="editstation_id"  class="form-select">
-											<option value="1">Station 1</option>
-											<option value="2">Station 2</option>
-											<option value="3">Station 3</option>
-											<option value="4">Station 4</option>
-											<option value="5">Station 5</option>
-											<option value="6">Station 6</option>
-											<option value="7">Station 7</option>
-											<option value="8">Station 8</option>
-											<option value="9">Station 9</option>
-											<option value="10">Station 10</option>
-										</select>
+										Station ID
 									</label>
+									<select name="station_id" id="editstation_id"  class="form-select">
+										<option value="1">Station 1</option>
+										<option value="2">Station 2</option>
+										<option value="3">Station 3</option>
+										<option value="4">Station 4</option>
+										<option value="5">Station 5</option>
+										<option value="6">Station 6</option>
+										<option value="7">Station 7</option>
+										<option value="8">Station 8</option>
+										<option value="9">Station 9</option>
+										<option value="10">Station 10</option>
+									</select>
 								</div>
 
 								<div class="mb-3">
+									<label>
+										Barangay Name
+									</label>
 									<input type="text" class="form-control" name="barangay_name" id="editbarangay_name" placeholder="Barangay Name" />
 								</div>
 
 								<div class="mb-3">
+									<label>
+										Canonical Name
+									</label>
 									<input type="text" class="form-control" name="canonical_name" id="editlocation" placeholder="Canonical Name" />
 								</div>
 
 								<div class="mb-3">
+									<label>
+										Latitude
+									</label>
 									<input type="text" class="form-control input-sm" name="lat" id="editlatitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
+									<label>
+										Longitude
+									</label>
 									<input type="text" class="form-control input-sm" name="long" id="editlongitude" placeholder="Longitude" />
 								</div>
 								<div class="mb-3">
+									<label>
+										Remarks
+									</label>
 									<input type="text" class="form-control input-sm" name="remarks" id="editremarks" placeholder="Remarks" />
 								</div>
 						</div>

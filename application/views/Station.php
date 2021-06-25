@@ -53,17 +53,17 @@
 							<form id='frmStation'>
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="station_name" id="station_name" placeholder="Station Name" />
+									<label for="station_name">Station Name</label><input type="text" class="form-control" name="station_name" id="station_name" placeholder="Station Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="lat" id="latitude" placeholder="Latitude" />
+									<label for="latitude">Latitude</label><input type="text" class="form-control input-sm" name="lat" id="latitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="long" id="longitude" placeholder="Longitude" />
+									<label for="longitude">Longitude</label><input type="text" class="form-control input-sm" name="long" id="longitude" placeholder="Longitude" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="remarks" id="remarks" placeholder="Remarks" />
+									<label for="remarks">Remarks</label><input type="text" class="form-control input-sm" name="remarks" id="remarks" placeholder="Remarks" />
 								</div>
 
 							</form>
@@ -94,17 +94,17 @@
 							<form id='frmEditStation'>
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="station_name" id="editstation_name" placeholder="Station Name" />
+									<label for="editstation_name">Station Name</label><input type="text" class="form-control" name="station_name" id="editstation_name" placeholder="Station Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="lat" id="editlatitude" placeholder="Latitude" />
+									<label for="editlatitude">Latitude</label><input type="text" class="form-control input-sm" name="lat" id="editlatitude" placeholder="Latitude" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="long" id="editlongitude" placeholder="Longitude" />
+									<label for="editlongitude">Longitude</label><input type="text" class="form-control input-sm" name="long" id="editlongitude" placeholder="Longitude" />
 								</div>
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="remarks" id="editremarks" placeholder="Remarks" />
+									<label for="editremarks">Remarks</label><input type="text" class="form-control input-sm" name="remarks" id="editremarks" placeholder="Remarks" />
 								</div>
 						</div>
 					</div>

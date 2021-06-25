@@ -49,28 +49,28 @@
 							<form id='frmPersonnel' >
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="fname" id="firstname" placeholder="First Name" />
+									<label for="firstname">Firstname</label><input type="text" class="form-control" name="fname" id="firstname" placeholder="First Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="mname" id="middlename" placeholder="Middle Name" />
+									<label for="middlename">Middlename</label><input type="text" class="form-control" name="mname" id="middlename" placeholder="Middle Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="lname" id="lastname" placeholder="Last Name" />
+									<label for="lastname">Lastname</label><input type="text" class="form-control input-sm" name="lname" id="lastname" placeholder="Last Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="address" id="address" placeholder="Address" />
+									<label for="address">Address</label><input type="text" class="form-control input-sm" name="address" id="address" placeholder="Address" />
 								</div>
 
 								<div class="mb-3">
-									<label> Birthdate Date </label>
+									<label> Birthday </label>
 									<input type="date" class="form-control" name="dob" id="dob "/>
 								</div>
 
 								<div class="mb-3">
-									<input type="password" class="form-control" name="password" id="password" placeholder="Password"/>
+									<label for="password">Password</label><input type="password" class="form-control" name="password" id="password" placeholder="Password"/>
 								</div>
 								<div class="mb-3">
 									<input type="button" class="form-control" id="generatePassword" value="Generate Password"/>
@@ -106,19 +106,19 @@
 						<div class="col">
 							<form id='frmEditPersonnel' >
 								<div class="mb-3">
-									<input type="text" class="form-control" name="fname" id="editfirstname" placeholder="First Name" />
+									<label for="editfirstname">Firstname</label><input type="text" class="form-control" name="fname" id="editfirstname" placeholder="First Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control" name="mname" id="editmiddlename" placeholder="Middle Name" />
+									<label for="editmiddlename">Middlename</label><input type="text" class="form-control" name="mname" id="editmiddlename" placeholder="Middle Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="lname" id="editlastname" placeholder="Last Name" />
+									<label for="editlastname">Lastname</label><input type="text" class="form-control input-sm" name="lname" id="editlastname" placeholder="Last Name" />
 								</div>
 
 								<div class="mb-3">
-									<input type="text" class="form-control input-sm" name="address" id="editaddress" placeholder="Address" />
+									<label for="editaddress">Address</label><input type="text" class="form-control input-sm" name="address" id="editaddress" placeholder="Address" />
 								</div>
 
 
