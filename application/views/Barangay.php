@@ -15,6 +15,7 @@
 					Station Coverage
 					<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
 					<button type="button" data-bs-toggle="modal" data-bs-target="#addBarangayModal" class="btn btn-success float-end">Add</button>
+					<a class="nav-link float-end mx-3" href="<?php echo site_url("main/index/StationMap")?>">Interactive Map</span></a>
 				</div>
 				<div class="card-body">
 					<table class="table" id="barangayTable">
