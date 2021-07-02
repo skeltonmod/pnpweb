@@ -49,6 +49,24 @@
 							<form id='frmPersonnel' >
 
 								<div class="mb-3">
+									<label>
+										Station ID
+									</label>
+									<select name="station_id" id="station_id"  class="form-select">
+										<option value="1">Station 1</option>
+										<option value="2">Station 2</option>
+										<option value="3">Station 3</option>
+										<option value="4">Station 4</option>
+										<option value="5">Station 5</option>
+										<option value="6">Station 6</option>
+										<option value="7">Station 7</option>
+										<option value="8">Station 8</option>
+										<option value="9">Station 9</option>
+										<option value="10">Station 10</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
 									<label for="firstname">Firstname</label><input type="text" class="form-control" name="fname" id="firstname" placeholder="First Name" />
 								</div>
 
@@ -58,6 +76,10 @@
 
 								<div class="mb-3">
 									<label for="lastname">Lastname</label><input type="text" class="form-control input-sm" name="lname" id="lastname" placeholder="Last Name" />
+								</div>
+
+								<div class="mb-3">
+									<label for="email">Email</label><input type="email" class="form-control input-sm" name="email" id="email" placeholder="Email" />
 								</div>
 
 								<div class="mb-3">
@@ -115,6 +137,10 @@
 
 								<div class="mb-3">
 									<label for="editlastname">Lastname</label><input type="text" class="form-control input-sm" name="lname" id="editlastname" placeholder="Last Name" />
+								</div>
+
+								<div class="mb-3">
+									<label for="email">Email</label><input type="email" class="form-control input-sm" name="email" id="editemail" placeholder="Email" />
 								</div>
 
 								<div class="mb-3">
@@ -245,6 +271,7 @@
 						$("#editmiddlename").val(data.mname)
 						$("#editaddress").val(data.address)
 						$("#editdob ").val(data.dob)
+						$("#editemail ").val(data.email)
 						$("#saveBtn").attr('name', data.personnel_id)
 						break;
 

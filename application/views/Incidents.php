@@ -186,7 +186,7 @@
 				{data: "image",
 					render: function (data){
 						let isEmpty = (data === "" ? "no_image.png" : data)
-						return `<img width=50 height=50 src='../../incident_images/${isEmpty}' alt="">`;
+						return `<img width=50 height=50 src='../../public/informant_images/${isEmpty}' alt="">`;
 					}},
 				{data: "id",
 					render: function (data){

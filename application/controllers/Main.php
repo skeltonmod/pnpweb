@@ -1,6 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+session_start();
 class Main extends CI_Controller
 {
 
@@ -8,6 +9,8 @@ class Main extends CI_Controller
 	public $PERSONNEL_MODEL;
 	public $BARANGAY_MODEL;
 	public $STATION_MODEL;
+	public $INFORMANT_MODEL;
+
 
 	public function __construct()
 	{
@@ -16,18 +19,25 @@ class Main extends CI_Controller
 		$this->load->model("PERSONNEL_MODEL");
 		$this->load->model("BARANGAY_MODEL");
 		$this->load->model("STATION_MODEL");
+		$this->load->model("INFORMANT_MODEL");
 	}
 
-	public function index($page="Home")
-	{
+
+	public function index($page="Home"){
 		$this->load->view('utils/Navigation');
-		$this->load->view($page);
+		if(count($_SESSION) > 0){
+			$this->load->view($page);
+		}else{
+			$this->load->view('Login');
+		}
 	}
+
+
 	function getImage($image,$filename){
 
 		$imagefiletype = pathinfo($image,PATHINFO_EXTENSION);
 		$basename = $filename.".".$imagefiletype;
-		$location = "/home/deyji/www/pnpweb/incident_images/".$basename;
+		$location = "/home/deyji/www/pnpweb/public/informant_images/".$basename;
 
 		// sanitize file
 		$check = getimagesize($_FILES["image"]["tmp_name"]);
@@ -47,7 +57,7 @@ class Main extends CI_Controller
 		}else{
 			echo "OOPS! \n";
 		}
-		chmod($location, '0777');
+		chmod($location, 0777);
 		return $basename;
 	}
 
@@ -128,13 +138,16 @@ class Main extends CI_Controller
 
 	// PERSONNEL
 	public function insertPersonnel(){
+
 		$data = array(
 			"fname"=> $this->input->post('fname'),
 			"lname"=> $this->input->post('lname'),
 			"mname"=> $this->input->post('mname'),
+			"email"=> $this->input->post('email'),
 			"address"=> $this->input->post('address'),
 			"dob"=> $this->input->post('dob'),
 			"password"=> $this->input->post('password'),
+			"station_id"=> $this->input->post('station_id'),
 		);
 
 		$this->PERSONNEL_MODEL->insert_personnel($data);
@@ -168,6 +181,7 @@ class Main extends CI_Controller
 					"fname"=> $this->input->post('fname'),
 					"lname"=> $this->input->post('lname'),
 					"mname"=> $this->input->post('mname'),
+					"email"=> $this->input->post('email'),
 					"address"=> $this->input->post('address'),
 					"dob"=> $this->input->post('dob'),
 
@@ -178,6 +192,28 @@ class Main extends CI_Controller
 				$this->PERSONNEL_MODEL->delete_personnel($this->input->post("id"));
 				break;
 		}
+	}
+
+	public function login_personnel(){
+		$data = array(
+			"password"=>$this->input->post("password"),
+			"email"=>$this->input->post("email")
+		);
+		$result = $this->PERSONNEL_MODEL->get_credentials($data);
+		if(count($result) > 0){
+			$_SESSION['email'] = $result[0]->email;
+			$_SESSION['personnel_id'] = $result[0]->personnel_id;
+			$_SESSION['station_id'] = $result[0]->station_id;
+			$_SESSION['type'] = $result[0]->type;
+		}
+
+		echo json_encode(array("data"=>$_SESSION));
+
+	}
+
+	public function logout_personnel(){
+		session_destroy();
+		echo "Logout success!";
 	}
 
 	// BARANGAY
@@ -285,6 +321,72 @@ class Main extends CI_Controller
 				$this->STATION_MODEL->delete_station($this->input->post("id"));
 				break;
 		}
+	}
+
+	// Head office incident
+	public function get_temp_incident(){
+		$data = $this->INFORMANT_MODEL->get_all();
+		$result = null;
+		foreach ($data as $row){
+			$result[] = array(
+				"id"=>$row->id,
+				"userid"=>$row->userid,
+				"type"=>$row->type,
+				"location"=>$row->latitude."/".$row->longitude,
+				"date"=>$row->date,
+				"time"=>$row->time,
+				"barangay"=>$row->barangay,
+				"station"=>$row->station,
+				"image"=>$row->image,
+
+			);
+		}
+		$response = array(
+			"data"=>$result
+		);
+		echo json_encode($response);
+	}
+
+	public function move_incident(){
+		if($this->input->post('mode') == "accept"){
+
+			// Do the Transfer
+			for($i=0; $i < count($this->input->post('items')); ++$i){
+				echo $i;
+				$result = $this->INFORMANT_MODEL->get_incident($this->input->post('items')[$i])[0];
+				$informant = $this->INFORMANT_MODEL->get_informant_name($result->userid)[0];
+				$data = array(
+					"incident_date"=>$result->date,
+					"incident_time"=>$result->time,
+					"latitude"=>$result->latitude,
+					"longitude"=>$result->longitude,
+					"location"=>$result->barangay,
+					"suspect"=>"",
+					"victim"=>$informant->firstname." ".$informant->lastname,
+					"police_station_no"=>$result->station,
+					"personnel_id"=>$_SESSION['personnel_id'],
+					"informant_id"=>$result->userid,
+					"remarks"=>"Pending",
+					"picture"=>$result->image,
+
+				);
+//				Insert to other table
+				$this->INCIDENT_MODEL->insert_incident($data);
+				// Delete from temp table
+				$this->INFORMANT_MODEL->delete_temp_incident($result->id);
+
+			}
+
+		}else{
+			for($i=0; $i < count($this->input->post('items')); ++$i){
+				$data = array(
+					"status"=> "Reject",
+				);
+
+				$this->INFORMANT_MODEL->decline_incident($this->input->post('items')[$i], $data);
+			}
+		}
+
 	}
 
 }

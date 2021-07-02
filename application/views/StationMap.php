@@ -62,14 +62,14 @@
 
 
 		$.ajax({
-			url: "<?php echo site_url()?>/main/getBarangay",
+			url: "<?php echo site_url()?>/main/getStation",
 			method: 'post',
 			dataType: 'json',
 			success: function (response){
 				$.each(response.data, function (index, value){
 					let lat = String(value.location).split('/')[0]
 					let long = String(value.location).split('/')[1]
-					L.marker([Number(lat), Number(long)]).addTo(map).bindPopup(`${value.barangay_name}`)
+					L.marker([Number(lat), Number(long)]).addTo(map).bindPopup(`${value.station_name}`)
 				})
 			}
 		})

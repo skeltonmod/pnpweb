@@ -42,4 +42,13 @@ class PERSONNEL_MODEL extends CI_Model
 		$this->db->where("personnel_id", $id);
 		$this->db->delete($tables);
 	}
+
+	public function get_credentials($data){
+		$this->db->select("*");
+		$this->db->from("personnel");
+		$this->db->where($data);
+		$query = $this->db->get();
+		return $query->result();
+
+	}
 }

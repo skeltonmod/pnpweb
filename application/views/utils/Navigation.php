@@ -1,3 +1,7 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+<!DOCTYPE html>
 <html lang="eng">
 <head>
 	<script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
@@ -14,34 +18,24 @@
 	<title>COCPO Web Dashboard</title>
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light menu" style="margin-bottom: 1em">
-	<a class="navbar-brand" href="#">COCPO Web Dashboard</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
+	<body>
+	<?php
+	if(count($_SESSION) > 0){
+		include 'NavBody.php';
+	}
+	?>
+	</body>
+	<script>
+		$("#logout").on('click', function (e){
+			$.ajax({
+				url: `<?php echo site_url()?>/main/logout_personnel`,
+				method: 'post',
+				dataType: 'json',
+				complete: function (response){
+					window.location.replace("<?php echo site_url()?>main/index/Login");
+				}
+			})
+		})
 
-	<div class="collapse navbar-collapse nav-menu" id="navbarSupportedContent">
-		<?php echo base_url()?>
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item ">
-				<a class="nav-link" href="<?php echo site_url("main/index/Home")?>">Home</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Incidents')?>">Incidents</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Personnel')?>">Personnel</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Barangay')?>">Barangay</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Station')?>">Station</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Report</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+	</script>
 </html>
