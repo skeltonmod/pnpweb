@@ -182,8 +182,6 @@ class Informants extends CI_Controller
 		$response = array();
 		$image = $_FILES['image']['name'];
 
-		// TODO: New = Pending
-
 		$parse_image = $this->getImage($image, "INCIDENT"."_".$this->input->post('userid')."_".$this->input->post('type'));
 
 		// Get the station number from canonical name

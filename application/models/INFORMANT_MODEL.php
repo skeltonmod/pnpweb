@@ -63,7 +63,7 @@ class INFORMANT_MODEL extends CI_Model
 	}
 
 	public function get_station_data($canonical){
-		$this->db->select("station_id, barangay_name, remarks");
+		$this->db->select("station_id, barangay_name, remarks, barangay_id");
 		$this->db->from("stations_coverage");
 		$this->db->where("canonical_name", $canonical);
 		$query = $this->db->get();

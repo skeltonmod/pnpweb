@@ -23,7 +23,7 @@
 			</li>
 
 			<li class="nav-item">
-				<a class="nav-link" href="#">Report</a>
+				<a class="nav-link" href="<?php echo site_url('main/index/Reports')?>">Report</a>
 			</li>
 		</ul>
 	</div>

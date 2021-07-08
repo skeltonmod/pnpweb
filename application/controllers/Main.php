@@ -10,6 +10,7 @@ class Main extends CI_Controller
 	public $BARANGAY_MODEL;
 	public $STATION_MODEL;
 	public $INFORMANT_MODEL;
+	public $REPORTS_MODEL;
 
 
 	public function __construct()
@@ -20,6 +21,7 @@ class Main extends CI_Controller
 		$this->load->model("BARANGAY_MODEL");
 		$this->load->model("STATION_MODEL");
 		$this->load->model("INFORMANT_MODEL");
+		$this->load->model("REPORTS_MODEL");
 	}
 
 
@@ -175,7 +177,6 @@ class Main extends CI_Controller
 
 	// PERSONNEL
 
-	// TODO: Admin role
 	public function insertPersonnel(){
 
 		$data = array(
@@ -288,6 +289,7 @@ class Main extends CI_Controller
 			$result[] = array(
 				"id"=>$row->barangay_id,
 				"barangay_name"=>$row->barangay_name,
+				"canonical_name"=>$row->canonical_name,
 				"location"=>$row->lat."/".$row->long,
 				"remarks"=>$row->remarks
 
@@ -437,6 +439,19 @@ class Main extends CI_Controller
 			}
 		}
 
+	}
+
+	// Insert Report
+	public function insert_report(){
+		$barangay_id = $this->REPORTS_MODEL->get_barangay_id($this->input->post('barangay'))[0]->barangay_id;
+		$data = array(
+			"barangay_id" => $barangay_id,
+			"month"=> $this->input->post('month'),
+			"year"=> $this->input->post('year'),
+			"incidents"=> $this->input->post('incidents')
+
+		);
+		$this->REPORTS_MODEL->insert_report($data);
 	}
 
 }
