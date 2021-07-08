@@ -15,7 +15,18 @@
 					<h4>Station Coverage
 
 						<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
-						<button type="button" data-bs-toggle="modal" data-bs-target="#addBarangayModal" class="btn btn-success float-end">Add</button>
+
+						<?php
+
+						if(isset($_SESSION)){
+							if($_SESSION['type'] != "Standard"){
+								echo '
+					<button type="button" data-bs-toggle="modal" data-bs-target="#addBarangayModal" class="btn btn-success float-end">Add</button>';
+							}
+						}
+						?>
+
+
 						<a class="nav-link float-end mx-3" href="<?php echo site_url("main/index/StationMap")?>">Interactive Map</span></a>
 					</h4>
 				</div>
@@ -26,7 +37,6 @@
 							<th scope="col">Barangay #</th>
 							<th scope="col">Barangay Name</th>
 							<th scope="col">Lat/Long</th>
-							<th scope="col">Remarks</th>
 							<th scope="col">Action</th>
 						</tr>
 						</thead>
@@ -210,7 +220,6 @@
 				{data: "id"},
 				{data: "barangay_name"},
 				{data: "location"},
-				{data: "remarks"},
 				{data: "id",
 					render: function (data){
 						return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editBarangayModal" class="btn btn-success">Edit</button>

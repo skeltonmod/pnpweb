@@ -112,7 +112,8 @@ class Informants extends CI_Controller
 				"error"=>false,
 				"message"=>"User found!",
 				"userid" => $result->userid,
-				"user"=>$result->email
+				"user"=>$result->email,
+				"name"=>$result->firstname." ".$result->lastname
 			);
 		}else{
 			$response = array(
@@ -180,12 +181,16 @@ class Informants extends CI_Controller
 	public function insert_temp_incident(){
 		$response = array();
 		$image = $_FILES['image']['name'];
+
+		// TODO: New = Pending
+
 		$parse_image = $this->getImage($image, "INCIDENT"."_".$this->input->post('userid')."_".$this->input->post('type'));
 
 		// Get the station number from canonical name
-		$station_id = $this->INFORMANT_MODEL->get_station_id($this->input->post('barangay'))[0]->station_id;
+		$station_id = $this->INFORMANT_MODEL->get_station_data($this->input->post('barangay'))[0]->station_id;
 		$data = array(
 			"userid"=>$this->input->post('userid'),
+			"informant_name"=>$this->input->post('name'),
 			"type"=>$this->input->post('type'),
 			"latitude"=>$this->input->post('lat'),
 			"longitude"=>$this->input->post('lng'),
@@ -232,6 +237,7 @@ class Informants extends CI_Controller
 				"barangay"=>$row->barangay,
 				"station"=>$row->station,
 				"image"=>$row->image,
+				"status"=>$row->status,
 
 			);
 		}

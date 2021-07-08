@@ -13,6 +13,11 @@ class BARANGAY_MODEL extends CI_Model
 	public function get_barangay(){
 		$this->db->select("*");
 		$this->db->from("stations_coverage");
+
+		if($_SESSION['type'] != "SuperAdmin"){
+			$this->db->where("station_id", $_SESSION['station_id']);
+		}
+
 		$this->db->order_by("barangay_id", "desc");
 		$query = $this->db->get();
 		return $query->result();

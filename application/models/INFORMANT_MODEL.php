@@ -62,8 +62,8 @@ class INFORMANT_MODEL extends CI_Model
 		return $this->db->affected_rows() > 0;
 	}
 
-	public function get_station_id($canonical){
-		$this->db->select("station_id");
+	public function get_station_data($canonical){
+		$this->db->select("station_id, barangay_name, remarks");
 		$this->db->from("stations_coverage");
 		$this->db->where("canonical_name", $canonical);
 		$query = $this->db->get();
@@ -87,14 +87,15 @@ class INFORMANT_MODEL extends CI_Model
 	public function get_all(){
 		$this->db->select("*");
 		$this->db->from("temp_incidents");
-		$this->db->where("status !=", "Reject");
+		$this->db->where("status =", "New");
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	public function delete_temp_incident($id){
+	public function edit_temp_incident($id, $data){
 		$this->db->where("id", $id);
-		$this->db->delete("temp_incidents");
+		$this->db->update("temp_incidents", $data);
+		return $this->db->affected_rows() > 0;
 	}
 
 	public function decline_incident($id, $data){

@@ -16,9 +16,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<li class="nav-item" role="presentation">
 				<button class="nav-link active" id="pills-warning-tab" data-bs-toggle="pill" data-bs-target="#pills-warning" type="button" role="tab" aria-controls="pills-warning" aria-selected="true">Warning</button>
 			</li>
-			<li class="nav-item" role="presentation">
+			<?php
+			if(isset($_SESSION)){
+				if($_SESSION['type'] != "Standard"){
+					echo '<li class="nav-item" role="presentation">
 				<button class="nav-link" id="pills-incident-tab" data-bs-toggle="pill" data-bs-target="#pills-incident" type="button" role="tab" aria-controls="pills-incident" aria-selected="false">User Incidents</button>
-			</li>
+			</li>';
+				}
+			}
+
+			?>
 		</ul>
 		<div class="tab-content" id="pills-tabContent">
 			<div class="tab-pane fade show active" id="pills-warning" role="tabpanel" aria-labelledby="pills-warning-tab">
@@ -40,13 +47,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 
 			</div>
-			<div class="tab-pane fade" id="pills-incident" role="tabpanel" aria-labelledby="pills-incident-tab">
+
+			<?php
+			if(isset($_SESSION)){
+				if($_SESSION['type'] != "Standard"){
+					echo '<div class="tab-pane fade" id="pills-incident" role="tabpanel" aria-labelledby="pills-incident-tab">
 
 				<div class="card">
 					<div class="card-header">
 						<h4>User Incidents
-						<button class="btn btn-success float-end checked" onclick="moveIncident('accept')" style="margin-left: 1em; margin-right: 1em; display: none">Accept Checked</button>
-						<button class="btn btn-danger float-end checked" onclick="moveIncident('reject')" style="display: none" >Reject Checked</button>
+						<button class="btn btn-success float-end checked" onclick="moveIncident(\'accept\')" style="margin-left: 1em; margin-right: 1em; display: none">Accept Checked</button>
+						<button class="btn btn-danger float-end checked" onclick="moveIncident(\'reject\')" style="display: none" >Reject Checked</button>
 						</h4>
 					</div>
 					<div class="card-body">
@@ -54,10 +65,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">User ID</th>
+								<th scope="col">Name</th>
 								<th scope="col">Location</th>
-								<th scope="col">Barangay</th>
 								<th scope="col">Station</th>
+								<th scope="col">Contact #</th>
 								<th scope="col">Date</th>
 								<th scope="col">Time</th>
 								<th scope="col">Action</th>
@@ -70,7 +81,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 				</div>
 
-			</div>
+			</div>';
+				}
+			}
+
+			?>
 		</div>
 
 	</div>
@@ -92,10 +107,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			},
 			"columns":[
 				{data: "id"},
-				{data: "userid"},
-				{data: "location"},
+				{data: "name"},
 				{data: "barangay"},
 				{data: "station"},
+				{data: "contact"},
 				{data: "date"},
 				{data: "time"},
 				{data: "id",

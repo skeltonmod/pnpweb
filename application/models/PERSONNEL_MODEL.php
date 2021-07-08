@@ -10,6 +10,8 @@ class PERSONNEL_MODEL extends CI_Model
 		$this->load->database();
 	}
 
+
+
 	public function insert_personnel($data){
 		$this->db->insert('personnel', $data);
 
@@ -26,6 +28,9 @@ class PERSONNEL_MODEL extends CI_Model
 	public function get_personnel(){
 		$this->db->select("*");
 		$this->db->from("personnel");
+		if($_SESSION['type'] != "SuperAdmin"){
+			$this->db->where("station_id", $_SESSION['station_id']);
+		}
 		$this->db->order_by("personnel_id", "desc");
 		$query = $this->db->get();
 		return $query->result();

@@ -12,7 +12,16 @@
 				<div class="card-header">
 					Station Coverage
 					<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#addStationModal" class="btn btn-success float-end">Add</button>
+					<?php
+
+					if(isset($_SESSION)){
+						if($_SESSION['type'] != "Standard"){
+							echo '
+					<button type="button" data-bs-toggle="modal" data-bs-target="#addStationModal" class="btn btn-success float-end">Add</button>';
+						}
+					}
+					?>
+
 				</div>
 				<div class="card-body">
 					<table class="table" id="stationTable">

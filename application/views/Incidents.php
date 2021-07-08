@@ -20,9 +20,9 @@
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Incident Date</th>
-							<th scope="col">Latitude</th>
-							<th scope="col">Longitude</th>
-							<th scope="col">Remarks</th>
+							<th scope="col">Location</th>
+							<th scope="col">Status</th>
+<!--							<th scope="col">Remarks</th>-->
 							<th scope="col">Suspect</th>
 							<th scope="col">Victim</th>
 							<th scope="col">Image</th>
@@ -119,33 +119,50 @@
 						<div class="col">
 							<form id='frmEditIncident' >
 								<iframe src="../../map.html" id="mapframe" width="470" height="320" seamless></iframe>
-
+								<div class="mb-3">
+									<input type="text" name="temp_id" id="temp_id" value="0" hidden>
+								</div>
 								<div class="mb-3">
 									<label> Incident Date </label>
-									<input type="date" class="form-control" name="incident_date" id="edit_incident_date"/>
+									<input type="date" class="form-control" name="incident_date" id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Time </label>
-									<input type="time" class="form-control" name="incident_time" id="edit_incident_time"/>
+									<input type="time" class="form-control" name="incident_time" id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+								</div>
+								<div class="mb-3">
+									<label for="edit_remarks">Status</label>
+									<select name="status" id="edit_status"  class="form-select">
+										<option value="ACKNOWLEDGED">ACKNOWLEDGED</option>
+										<option value="PENDING">PENDING</option>
+										<option value="FOR INVESTIGATION">INVESTIGATION</option>
+										<option value="SETTLED">SETTLED</option>
+									</select>
+									<!--									<input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" --><?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?><!--/>-->
 								</div>
 
 								<div class="mb-3">
-									<label for="edit_suspect">Suspect</label><input type="text" class="form-control" name="suspect" id="edit_suspect" placeholder="Suspect" />
+									<label for="edit_suspect">Remarks</label><input type="text" class="form-control" name="remarks" id="edit_remarks" placeholder="Remarks"  />
+								</div>
+
+								<div class="mb-3">
+									<label for="edit_suspect">Suspect</label><input type="text" class="form-control" name="suspect" id="edit_suspect" placeholder="Suspect"  />
+								</div>
+
+								<div class="mb-3">
+									<label for="edit_victim">Victim</label><input type="text" class="form-control" name="victim" id="edit_victim" placeholder="Victim" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+								</div>
+
+								<div class="mb-3">
+									<label for="edit_latitude">Latitude</label><input type="text" class="form-control input-sm" name="latitude" id="edit_latitude" placeholder="Latitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+
+
 								</div>
 								<div class="mb-3">
-									<label for="edit_victim">Victim</label><input type="text" class="form-control" name="victim" id="edit_victim" placeholder="Victim" />
+									<label for="edit_longitude">Longitude</label><input type="text" class="form-control" name="longitude" id="edit_longitude" placeholder="Longitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
-									<label for="edit_remarks">Victim</label><input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" />
-								</div>
-								<div class="mb-3">
-									<label for="edit_latitude">Latitude</label><input type="text" class="form-control input-sm" name="latitude" id="edit_latitude" placeholder="Latitude" />
-								</div>
-								<div class="mb-3">
-									<label for="edit_longitude">Longitude</label><input type="text" class="form-control" name="longitude" id="edit_longitude" placeholder="Longitude"/>
-								</div>
-								<div class="mb-3">
-									<label for="edit_location">Location</label><input type="text" class="form-control" name="location" id="edit_location" placeholder="Location"/>
+									<label for="edit_location">Location</label><input type="text" class="form-control" name="location" id="edit_location" placeholder="Location" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 							</form>
 						</div>
@@ -162,6 +179,9 @@
 </body>
 <script>
 	$(document).ready(function (){
+
+		// TODO: Toast popup (intrusive)
+
 		$("#incidentTable").dataTable({
 			rowReorder: {
 				selector: 'td:nth-child(2)'
@@ -178,9 +198,9 @@
 			"columns":[
 				{data: "id"},
 				{data: "date"},
-				{data: "lat"},
-				{data: "long"},
-				{data: "remarks"},
+				{data: "location"},
+				{data: "status"},
+				// {data: "remarks"},
 				{data: "suspect"},
 				{data: "victim"},
 				{data: "image",
@@ -189,9 +209,16 @@
 						return `<img width=50 height=50 src='../../public/informant_images/${isEmpty}' alt="">`;
 					}},
 				{data: "id",
+					// TODO: Acknowledge button
 					render: function (data){
 						return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary">Edit</button>
-								<button type="button" onclick="manageData(${data}, 'delete')" class="btn btn-primary">Remove</button>`;
+								<?php if ($_SESSION['type'] == "Standard"){
+							echo '<button type="button" onclick="manageData(${data}, \'acknowledge\')" class="btn btn-primary">Acknowledge</button>';}
+						else{
+							echo '<button type="button" onclick="manageData(${data}, \'delete\')" class="btn btn-primary">Delete</button>';
+							echo '<button type="button" onclick="manageData(${data}, \'acknowledge\')" class="btn btn-primary">Acknowledge</button>';
+						}
+						?>`;
 					}},
 			]
 		})
@@ -275,15 +302,15 @@
 					case "edit":
 						let data = response[0]
 						console.log(data.incident_date)
-
 						$("#edit_incident_date").val(data.incident_date)
 						$("#edit_incident_time").val(data.incident_time)
 						$("#edit_suspect").val(data.suspect)
 						$("#edit_victim").val(data.victim)
-						$("#edit_remarks").val(data.remarks)
+						$("#edit_status").val(data.status)
 						$("#edit_latitude").val(data.latitude)
 						$("#edit_longitude").val(data.longitude)
 						$("#edit_location").val(data.location)
+						$("#temp_id").val(data.temp_id)
 						$("#saveBtn").attr('name', data.incident_no)
 
 						break;
@@ -291,6 +318,10 @@
 					case "delete":
 						alert("Incident Deleted Successfully")
 						break;
+
+						case "acknowledge":
+							alert("Incident Acknowledged!")
+							break;
 				}
 
 

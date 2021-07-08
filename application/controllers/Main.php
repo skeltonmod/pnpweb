@@ -66,16 +66,17 @@ class Main extends CI_Controller
 		$data = $this->INCIDENT_MODEL->get_incidents();
 		$result = null;
 		foreach ($data as $row){
+			$details = $this->INCIDENT_MODEL->get_incident_details($row->incident_no)[0];
+
 			$result[] = array(
 				"id"=>$row->incident_no,
 				"date"=>$row->incident_date,
-				"lat"=>$row->latitude,
-				"long"=>$row->longitude,
+				"location"=>$row->location,
+				"status"=>$details->status,
 				"remarks"=>$row->remarks,
 				"suspect"=>$row->suspect,
 				"victim"=>$row->victim,
 				"image"=>$row->picture,
-
 			);
 		}
 		$response = array(
@@ -101,7 +102,7 @@ class Main extends CI_Controller
 			'personnel_id' 			=> 2000,
 			'informant_id' 			=> 1000,
 			"picture"=> $parse_image,
-			"remarks"=> $this->input->post('remarks'),
+			"remarks"=> "",
 
 		);
 		echo $this->INCIDENT_MODEL->insert_incident($data);
@@ -126,17 +127,55 @@ class Main extends CI_Controller
 					"remarks"=> $this->input->post('remarks'),
 
 				);
+				$temp_data_details = array(
+					"status"=>$this->input->post('status'),
+				);
+
+				$data_details = array(
+					"incident_no"=>$this->input->post("id"),
+					"status"=>$this->input->post('status'),
+					"datetime_acknwldge"=>$this->input->post('incident_date')
+				);
+
 				$this->INCIDENT_MODEL->edit_incident($data, $this->input->post("id"));
+				$this->INCIDENT_MODEL->edit_incident_detail($data_details);
+				// Edit the temp_incident for mobile users
+
+				if($this->input->post('temp_id') != null){
+					$this->INFORMANT_MODEL->edit_temp_incident($this->input->post('temp_id'), $temp_data_details);
+				}
 				break;
 
 			case "delete":
 				$this->INCIDENT_MODEL->delete_incident($this->input->post("id"));
+				break;
+
+			case "acknowledge":
+
+				// sanity check
+				$temp_id = $this->INCIDENT_MODEL->get_current_incident($this->input->post('id'))[0]->temp_id;
+				$temp_data_details = array(
+					"incident_no"=> $this->input->post('id'),
+					"status"=>"ON-GOING"
+				);
+				$data_details = array(
+					"status"=>"ON-GOING"
+				);
+
+				$this->INCIDENT_MODEL->edit_incident_detail($temp_data_details);
+
+				if($temp_id != null){
+					$this->INFORMANT_MODEL->edit_temp_incident($temp_id, $data_details);
+				}
+
 				break;
 		}
 	}
 
 
 	// PERSONNEL
+
+	// TODO: Admin role
 	public function insertPersonnel(){
 
 		$data = array(
@@ -148,6 +187,7 @@ class Main extends CI_Controller
 			"dob"=> $this->input->post('dob'),
 			"password"=> $this->input->post('password'),
 			"station_id"=> $this->input->post('station_id'),
+			"type"=> $this->input->post('type'),
 		);
 
 		$this->PERSONNEL_MODEL->insert_personnel($data);
@@ -324,19 +364,25 @@ class Main extends CI_Controller
 	}
 
 	// Head office incident
+
 	public function get_temp_incident(){
 		$data = $this->INFORMANT_MODEL->get_all();
+
 		$result = null;
+
 		foreach ($data as $row){
+			$location_name = $this->INFORMANT_MODEL->get_station_data($row->barangay)[0]->barangay_name;
+			$contact = $this->INFORMANT_MODEL->get_informant($row->userid)[0]->mobilenumber;
 			$result[] = array(
 				"id"=>$row->id,
-				"userid"=>$row->userid,
+				"name"=>$row->informant_name,
 				"type"=>$row->type,
 				"location"=>$row->latitude."/".$row->longitude,
 				"date"=>$row->date,
 				"time"=>$row->time,
-				"barangay"=>$row->barangay,
+				"barangay"=>$location_name,
 				"station"=>$row->station,
+				"contact"=>$contact,
 				"image"=>$row->image,
 
 			);
@@ -366,14 +412,18 @@ class Main extends CI_Controller
 					"police_station_no"=>$result->station,
 					"personnel_id"=>$_SESSION['personnel_id'],
 					"informant_id"=>$result->userid,
-					"remarks"=>"Pending",
 					"picture"=>$result->image,
-
+					"temp_id"=>$this->input->post('items')[$i],
 				);
+
 //				Insert to other table
 				$this->INCIDENT_MODEL->insert_incident($data);
-				// Delete from temp table
-				$this->INFORMANT_MODEL->delete_temp_incident($result->id);
+				// Change temp incident status
+				$data = array(
+					"status"=>strtoupper("Acknowledged")
+				);
+
+				$this->INFORMANT_MODEL->edit_temp_incident($result->id, $data);
 
 			}
 

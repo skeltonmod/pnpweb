@@ -14,7 +14,13 @@
 				<div class="card-header">
 					Manage Personnel
 					<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#addPersonnelModal" class="btn btn-success float-end">Add</button>
+					<?php
+					if(isset($_SESSION)){
+						if($_SESSION['type'] != "Standard"){
+							echo '<button type="button" data-bs-toggle="modal" data-bs-target="#addPersonnelModal" class="btn btn-success float-end">Add</button>';
+						}
+					}
+					?>
 				</div>
 				<div class="card-body">
 					<table class="table" id="personnelTable">
@@ -90,6 +96,23 @@
 									<label> Birthday </label>
 									<input type="date" class="form-control" name="dob" id="dob "/>
 								</div>
+
+								<?php
+
+								if($_SESSION['type'] != "Standard"){
+									echo '<div class="mb-3">
+									<label>
+										Personnel Type
+									</label>
+									<select name="type" id="type"  class="form-select">
+										<option value="Admin">Admin</option>
+										<option value="Standard">Standard</option>
+									</select>
+								</div>';
+								}
+
+								?>
+
 
 								<div class="mb-3">
 									<label for="password">Password</label><input type="password" class="form-control" name="password" id="password" placeholder="Password"/>
