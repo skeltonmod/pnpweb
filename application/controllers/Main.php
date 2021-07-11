@@ -468,7 +468,7 @@ class Main extends CI_Controller
 		foreach ($data as $row){
 			$result[] = array(
 				"id"=>$row->id,
-				"barangay"=>$row->barangay_id,
+				"barangay"=>$row->barangay_name,
 				"month"=>$row->month,
 				"year"=>$row->year,
 				"incidents"=>$row->incidents,

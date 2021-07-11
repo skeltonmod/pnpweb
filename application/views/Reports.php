@@ -142,7 +142,6 @@
 					<div class="card">
 						<div class="card-header">
 							<h4>Incident Report
-
 							</h4>
 							<form id="frmSearch">
 								<div class="form-group row">
@@ -291,7 +290,16 @@
 		})
 	})
 
+	$("#generateBtn").on('click', function (e){
+		let formData = new FormData(document.getElementById("frmSearch"));
 
+		let data = {
+			"from": `${formData.get('month')}_01_${formData.get('year')}`,
+			"to": `${formData.get('monthTo')}_01_${formData.get('yearTo')}`
+		}
+
+		window.location.href = `<?php echo site_url()?>/excel/index?data=${JSON.stringify(data)}`
+	})
 </script>
 
 </html>
