@@ -21,4 +21,13 @@ class REPORTS_MODEL extends CI_Model
 		return $query->result();
 	}
 
+
+	public function search_reports($data){
+		$this->db->select("*");
+		$this->db->from("reports");
+		$this->db->where('dateAt BETWEEN "'. $data['from']. '" and "'. $data['to'].'"');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 }

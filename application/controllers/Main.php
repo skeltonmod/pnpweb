@@ -444,14 +444,41 @@ class Main extends CI_Controller
 	// Insert Report
 	public function insert_report(){
 		$barangay_id = $this->REPORTS_MODEL->get_barangay_id($this->input->post('barangay'))[0]->barangay_id;
+		$date = $this->input->post('month').' 01 '. $this->input->post('year');
 		$data = array(
 			"barangay_id" => $barangay_id,
 			"month"=> $this->input->post('month'),
 			"year"=> $this->input->post('year'),
-			"incidents"=> $this->input->post('incidents')
-
+			"incidents"=> $this->input->post('incidents'),
+			"dateAt"=>date('Y-m-d', strtotime(str_replace('-', '/', $date)))
 		);
 		$this->REPORTS_MODEL->insert_report($data);
+	}
+
+	public function get_report(){
+		$dateFrom = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('fromMonth').' 01 '. $this->input->post('fromYear'))));
+		$dateTo = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('toMonth').' 01 '. $this->input->post('toYear'))));
+		$result = array();
+		$data = array(
+			"from"=>$dateFrom,
+			"to"=>$dateTo
+		);
+		$data = $this->REPORTS_MODEL->search_reports($data);
+
+		foreach ($data as $row){
+			$result[] = array(
+				"id"=>$row->id,
+				"barangay"=>$row->barangay_id,
+				"month"=>$row->month,
+				"year"=>$row->year,
+				"incidents"=>$row->incidents,
+			);
+		}
+
+		$response = array(
+			"data"=>$result
+		);
+		echo json_encode($response);
 	}
 
 }

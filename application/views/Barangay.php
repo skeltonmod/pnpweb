@@ -249,6 +249,9 @@
 			success: function (response){
 				console.log(response)
 
+			}, complete: function (e){
+				$("#barangayTable").DataTable().ajax.reload()
+				alert("Record Edited Successfully")
 			}
 
 		})
