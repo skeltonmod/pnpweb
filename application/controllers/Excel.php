@@ -47,7 +47,7 @@ class Excel extends CI_Controller
 		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, "Barangay");
 
 		$cols = array();
-
+		$rows = array();
 		for($i = 0; $i < count($column_headers); $i++){
 			// check for empty data
 			 if($this->REPORTS_MODEL->check_empty(explode('-', $column_headers[$i])[0], explode('-', $column_headers[$i])[1])){
@@ -60,7 +60,7 @@ class Excel extends CI_Controller
 			// finally build the spreadsheet
 			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 + $i, 1, $cols[$i]);
 			$barangay_row = $this->REPORTS_MODEL->search_reports_date(explode('-', $cols[$i])[0], explode('-', $cols[$i])[1]);
-			$rows = array();
+
 			// Build the barangay rows first
 			if($i == 0){
 				for($x = 0; $x < count($barangay_row); $x++){
@@ -72,10 +72,16 @@ class Excel extends CI_Controller
 
 			// then build the data here
 			for($x = 0; $x < count($barangay_row); $x++){
-				$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 + $i, 2 + $x, $barangay_row[$x]->incidents);
+				$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 + $i, array_search($barangay_row[$x]->canonical_name, $rows) + 2, $barangay_row[$x]->incidents);
+//				echo $barangay_row[$x]->canonical_name."->".(array_search($barangay_row[$x]->canonical_name, $rows) + 2). "</br>";
 			}
 
+
 		}
+
+
+//		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 , 2 + array_search($rows[2], $rows), 1212121);
+
 		// write to file
 		$writer = new Ods($spreadsheet);
 
