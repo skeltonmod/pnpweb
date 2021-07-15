@@ -31,23 +31,36 @@ class REPORTS_MODEL extends CI_Model
 		return $query->result();
 	}
 
-	public function search_reports_date($month, $year){
+	public function search_reports_date($month, $year, $barangay = null){
 		$this->db->select("reports.month, reports.year, reports.incidents, reports.id, stations_coverage.barangay_name, stations_coverage.canonical_name");
 		$this->db->from("reports");
 		$this->db->join('stations_coverage', 'stations_coverage.barangay_id=reports.barangay_id', 'left');
 		$this->db->where('month', $month);
 		$this->db->where('year', $year);
+
+		if($barangay != null){
+			$this->db->where('reports.barangay_id', $barangay);
+		}
+
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	public function check_empty($month, $year){
+
+
+
+	public function check_empty($month, $year, $barangay = null){
 		$this->db->select("reports.month, reports.year, reports.incidents, reports.id, stations_coverage.barangay_name, stations_coverage.canonical_name");
 		$this->db->from("reports");
 		$this->db->join('stations_coverage', 'stations_coverage.barangay_id=reports.barangay_id', 'left');
 		$this->db->where('month', $month);
 		$this->db->where('year', $year);
 		$query = $this->db->get();
+
+		if($barangay != null){
+			$this->db->where('reports.barangay_id', $barangay);
+		}
+
 		if($query->num_rows() > 0){
 			return true;
 		}else{

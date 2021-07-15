@@ -2,6 +2,8 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
 
 class Excel extends CI_Controller
 {
@@ -50,10 +52,10 @@ class Excel extends CI_Controller
 		$rows = array();
 		for($i = 0; $i < count($column_headers); $i++){
 			// check for empty data
-			 if($this->REPORTS_MODEL->check_empty(explode('-', $column_headers[$i])[0], explode('-', $column_headers[$i])[1])){
-			 	// rebuild the array
-				 $cols[] = $column_headers[$i];
-			 }
+			if($this->REPORTS_MODEL->check_empty(explode('-', $column_headers[$i])[0], explode('-', $column_headers[$i])[1])){
+				// rebuild the array
+				$cols[] = $column_headers[$i];
+			}
 		}
 
 		for($i = 0; $i < count($cols); $i++){
@@ -61,7 +63,7 @@ class Excel extends CI_Controller
 			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 + $i, 1, $cols[$i]);
 			$barangay_row = $this->REPORTS_MODEL->search_reports_date(explode('-', $cols[$i])[0], explode('-', $cols[$i])[1]);
 
-			// Build the barangay rows first
+			// Build the barangay rows first;
 			if($i == 0){
 				for($x = 0; $x < count($barangay_row); $x++){
 					$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 2 + $x, $barangay_row[$x]->canonical_name);
@@ -73,24 +75,46 @@ class Excel extends CI_Controller
 			// then build the data here
 			for($x = 0; $x < count($barangay_row); $x++){
 				$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 + $i, array_search($barangay_row[$x]->canonical_name, $rows) + 2, $barangay_row[$x]->incidents);
-//				echo $barangay_row[$x]->canonical_name."->".(array_search($barangay_row[$x]->canonical_name, $rows) + 2). "</br>";
 			}
 
 
 		}
 
-
-//		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2 , 2 + array_search($rows[2], $rows), 1212121);
-
 		// write to file
 		$writer = new Ods($spreadsheet);
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
-		header('Content-Disposition: attachment;filename="'. $filename .'.ods"');
+		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
 		header('Cache-Control: max-age=0');
 
 		$writer->save('php://output');
+	}
+
+	public function csv(){
+		// First get the month and the barangay
+		$spreadsheet = new Spreadsheet();
+		$date = date('Y-m-d', strtotime(str_replace('-', '/', str_replace('_',' ', json_decode($this->input->get('data'))->date))));
+		$barangay = json_decode($this->input->get('data'))->barangay;
+		$month = explode('_',json_decode($this->input->get('data'))->date)[0];
+		$filename = "predict";
+
+
+		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, "Month");
+		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, 1, "Incidents");
+		// Month is already implied from the request
+		for($i = 0; $i < 5; ++$i){
+			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 2 + $i, $month." ".(2016 + $i));
+			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, 2 + $i, $this->REPORTS_MODEL->search_reports_date($month, 2016 + $i, $barangay)[0]->incidents);
 		}
 
+
+
+		// CSV writer
+		$csv_writer = new Csv($spreadsheet);
+		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
+		header('Cache-Control: max-age=0');
+
+		$csv_writer->save('php://output');
+	}
 
 }

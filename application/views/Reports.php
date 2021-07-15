@@ -125,7 +125,7 @@
 								</div>
 								<div class="mb-3 row">
 									<div class="col-sm-1 mb-3">
-										<button type="button" id="predict" class="btn btn-primary">Predict</button>
+										<button type="button" name="predict" id="predict" class="btn btn-primary">Predict</button>
 									</div>
 									<div class="col-sm-2">
 										<button type="button" id="addBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReportsModal">Add No. of Incidents</button>
@@ -210,18 +210,12 @@
 								</thead>
 								<tbody></tbody>
 							</table>
-
 						</div>
-
 					</div>
-
 				</div>
 			</div>
-
-
 		</div>
 	</div>
-
 </body>
 
 <script>
@@ -238,7 +232,7 @@
 			dataType: 'json',
 			success: function (response) {
 				$.each(response.data, function (index, value){
-					$("select[name='barangay']").append(`<option value="${value.canonical_name}">${value.canonical_name}</option>`);
+					$("select[name='barangay']").append(`<option value="${value.id}">${value.canonical_name}</option>`);
 				});
 			}
 
@@ -262,9 +256,8 @@
 	});
 
 	$("#searchBtn").on('click', function (e){
-		$("#tableReports").DataTable().destroy();
 		let formData = new FormData(document.getElementById('frmSearch'));
-
+		$("#tableReports").DataTable().destroy();
 		$("#tableReports").dataTable({
 			lengthChange: true,
 			responsive: true,
@@ -299,6 +292,14 @@
 		}
 
 		window.location.href = `<?php echo site_url()?>/excel/index?data=${JSON.stringify(data)}`
+	})
+
+	$("#predict").on('click', function (e){
+		let data = {
+			"date": `${$("#findMonth").val()}_01_${$("#findYear").val()}`,
+			"barangay": `${$("#findBarangay").val()}`
+		}
+		window.location.href = `<?php echo site_url()?>/excel/csv?data=${JSON.stringify(data)}`
 	})
 </script>
 
