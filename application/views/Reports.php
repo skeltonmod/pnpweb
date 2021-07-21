@@ -232,7 +232,7 @@
 			dataType: 'json',
 			success: function (response) {
 				$.each(response.data, function (index, value){
-					$("select[name='barangay']").append(`<option value="${value.id}">${value.canonical_name}</option>`);
+					$("select[name='barangay']").append(`<option value="${value.id}_${value.canonical_name}">${value.canonical_name}</option>`);
 				});
 			}
 

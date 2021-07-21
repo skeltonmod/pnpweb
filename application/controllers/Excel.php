@@ -94,21 +94,20 @@ class Excel extends CI_Controller
 		// First get the month and the barangay
 		$spreadsheet = new Spreadsheet();
 		$date = date('Y-m-d', strtotime(str_replace('-', '/', str_replace('_',' ', json_decode($this->input->get('data'))->date))));
-		$barangay = json_decode($this->input->get('data'))->barangay;
+		$barangay = explode('_', json_decode($this->input->get('data'))->barangay)[0];
 		$month = explode('_',json_decode($this->input->get('data'))->date)[0];
+		$year = explode('_',json_decode($this->input->get('data'))->date)[2];
 		$filename = "predict";
-
 
 		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, "Month");
 		$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, 1, "Incidents");
+
+
 		// Month is already implied from the request
-		for($i = 0; $i < 5; ++$i){
-			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 2 + $i, $month." ".(2016 + $i));
+		for($i = 0; $i < count($this->REPORTS_MODEL->search_reports_length($month, $barangay)); ++$i){
+			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 2 + $i, $i + 1);
 			$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, 2 + $i, $this->REPORTS_MODEL->search_reports_date($month, 2016 + $i, $barangay)[0]->incidents);
 		}
-
-
-
 		// CSV writer
 		$csv_writer = new Csv($spreadsheet);
 		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');

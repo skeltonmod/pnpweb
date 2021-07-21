@@ -443,7 +443,7 @@ class Main extends CI_Controller
 
 	// Insert Report
 	public function insert_report(){
-		$barangay_id = $this->REPORTS_MODEL->get_barangay_id($this->input->post('barangay'))[0]->barangay_id;
+		$barangay_id = $this->REPORTS_MODEL->get_barangay_id(explode('_', $this->input->post('barangay'))[1])[0]->barangay_id;
 		$date = $this->input->post('month').' 01 '. $this->input->post('year');
 		$data = array(
 			"barangay_id" => $barangay_id,
