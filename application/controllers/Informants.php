@@ -30,7 +30,7 @@ class Informants extends CI_Controller
 
 		$imagefiletype = pathinfo($image,PATHINFO_EXTENSION);
 		$basename = $filename.".".$imagefiletype;
-		$location = "/home/deyji/www/pnpweb/public/informant_images/".$basename;
+		$location = "../../public/informant_images/".$basename;
 
 		// sanitize file
 		$check = getimagesize($_FILES["image"]["tmp_name"]);
