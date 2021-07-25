@@ -23,13 +23,12 @@ class INCIDENT_MODEL extends CI_Model
 	}
 
 	public function insert_incident($data){
-		$this->db->insert('incidents', $data);
+    $data['isNew'] = boolval(True);
+    $this->db->insert('incidents', $data);
 		$last_id = $this->db->insert_id();
 		$details = array(
 			"incident_no"=>	$last_id,
 			"status"=>($data['temp_id'] == "" ? strtoupper('New') : strtoupper("Acknowledged")),
-			"datetime_acknwldge"=>$data['incident_date'],
-
 		);
 		$this->db->insert('incident_details', $details);
 	}
@@ -43,12 +42,13 @@ class INCIDENT_MODEL extends CI_Model
 		return $query->result();
 	}
 
-	public function edit_incident($data, $id){
-		$this->db->where("incident_no", $id);
+  public function edit_incident($data, $id){
+    $data['isNew'] = boolval(False);
+    $this->db->where("incident_no", $id);
 		$this->db->update("incidents", $data);
 	}
 
-	public function edit_incident_detail($data){
+  public function edit_incident_detail($data){
 		$this->db->insert("incident_details", $data);
 	}
 
@@ -66,5 +66,13 @@ class INCIDENT_MODEL extends CI_Model
 		$query = $this->db->get();
 		return $query->result();
 
-	}
+  }
+
+  public function count_new_incidents(){
+    $this->db->select('*');
+    $this->db->from('incidents');
+    $this->db->where('isNew', 1);
+    $query = $this->db->get();
+    return $query->result();
+  }
 }

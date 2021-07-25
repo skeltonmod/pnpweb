@@ -10,10 +10,10 @@
 				<a class="nav-link" href="<?php echo site_url("main/index/Home")?>">Home</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Incidents')?>">Incidents</a>
+				<a class="nav-link" href="<?php echo site_url('main/index/Incidents')?>">Incidents <span id="incident_notif" style="color: red;">(n)</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Personnel')?>">Personnel</a>
+				<a class="nav-link" href="<?php echo site_url('main/index/Personnel')?>">Personnel </a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="<?php echo site_url('main/index/Barangay')?>">Barangay</a>
@@ -31,3 +31,44 @@
 		<button class="btn btn-outline-danger mx-6" id="logout" type="button">Logout</button>
 	</div>
 </nav>
+
+
+<script>
+//global incident counter
+
+let incident_count = 0;
+
+// get the initial incident count to check for alert
+$(document).ready(function (){
+  $.ajax({
+				url: `<?php echo site_url()?>/main/count_incidents`,
+				method: 'post',
+				dataType: 'json',
+				success: function (response){
+				  incident_count = response.incidents;
+          document.getElementById('incident_notif').innerText = incident_count
+        }
+			}) 
+})
+
+// Add number of incidents for every nth interval
+  setInterval(function(){
+      /* console.log(incident_count) */
+    $.ajax({
+				url: `<?php echo site_url()?>/main/count_incidents`,
+				method: 'post',
+				dataType: 'json',
+        success: function (response){
+          if(incident_count !== response.incidents){
+              console.log(incident_count);
+              alert(`You have ${response.incidents} new incidents`)
+              incident_count = response.incidents
+              document.getElementById('incident_notif').innerText = incident_count
+          }
+				}
+			})
+  }, 5000)    
+
+
+
+</script>

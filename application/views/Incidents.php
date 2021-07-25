@@ -244,6 +244,11 @@
 			success: function (response){
 				console.log(response)
 
+			},
+
+			complete: function (e){
+				$("#incidentTable").DataTable().ajax.reload()
+				alert("Record Edited Successfully")
 			}
 
 		})

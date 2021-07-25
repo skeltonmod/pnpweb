@@ -25,8 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 	?>
 	</body>
-	<script>
-		$("#logout").on('click', function (e){
+<script>
+  		$("#logout").on('click', function (e){
 			$.ajax({
 				url: `<?php echo site_url()?>/main/logout_personnel`,
 				method: 'post',
@@ -35,7 +35,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					window.location.replace("<?php echo site_url()?>main/index/Login");
 				}
 			})
-		})
-
+		}) 
 	</script>
 </html>
