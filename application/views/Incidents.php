@@ -103,7 +103,6 @@
 									<input type="file" onchange="getImage(this, 'add')" id="file_save_img"
 										   name="file_save_img"/>
 								</div>
-
 							</form>
 						</div>
 					</div>
@@ -152,8 +151,6 @@
 										<option value="FOR INVESTIGATION">INVESTIGATION</option>
 										<option value="SETTLED">SETTLED</option>
 									</select>
-									<!--									<input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" -->
-									<?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?><!--/>-->
 								</div>
 
 								<div class="mb-3">
@@ -192,6 +189,13 @@
 									<label for="edit_location">Location</label><input type="text" class="form-control"
 																					  name="location" id="edit_location"
 																					  placeholder="Location" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+								</div>
+								<div class="mb-3">
+									<label> Incident Image </label>
+									<img src="../../incident_images/no_image.png" id="edit_img_save_preview" width="120"
+										 height="120">
+									<input type="file" onchange="getImage(this, 'edit')" id="edit_file_save_img"
+										   name="file_save_img"/>
 								</div>
 							</form>
 						</div>
@@ -304,6 +308,7 @@
 		let formData = new FormData(document.getElementById("frmEditIncident"));
 		formData.append("key", "update")
 		formData.append("id", this.name)
+		formData.append("image", $('#edit_file_save_img')[0].files[0])
 		$.ajax({
 			url: `<?php echo site_url()?>/main/manage_incident`,
 			method: 'post',
@@ -348,7 +353,7 @@
 						$("#edit_location").val(data.location)
 						$("#temp_id").val(data.temp_id)
 						$("#saveBtn").attr('name', data.incident_no)
-
+						$('#edit_img_save_preview').attr('src', `../../incident_images/${data.picture}`)
 						break;
 
 					case "delete":

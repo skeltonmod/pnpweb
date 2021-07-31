@@ -134,6 +134,9 @@ class Main extends CI_Controller
 				break;
 
 			case "update":
+				$image = $_FILES['image']['name'];
+				$parse_image = $this->getImage($image, "INCIDENT_".$this->input->post('incident_date')."_".$this->input->post('victim'));
+
 				$data = array(
 					"incident_date"=> $this->input->post('incident_date'),
 					"incident_time"=> $this->input->post('incident_time'),
@@ -143,6 +146,7 @@ class Main extends CI_Controller
 					"suspect"=> $this->input->post('suspect'),
 					"victim"=> $this->input->post('victim'),
 					"remarks"=> $this->input->post('remarks'),
+					"picture"=>$parse_image
 
 				);
 				$temp_data_details = array(
