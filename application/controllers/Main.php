@@ -495,5 +495,10 @@ class Main extends CI_Controller
 		);
 		echo json_encode($response);
 	}
+  
+  public function count_incidents(){
+    $result = $this->INCIDENT_MODEL->count_new_incidents();
 
+    echo json_encode(['incidents' => count($result)]);
+  }  
 }
