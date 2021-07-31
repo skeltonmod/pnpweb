@@ -10,7 +10,7 @@
 				<a class="nav-link" href="<?php echo site_url("main/index/Home")?>">Home</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="<?php echo site_url('main/index/Incidents')?>">Incidents <span id="incident_notif" style="color: red;">(n)</span></a>
+				<a class="nav-link" href="<?php echo site_url('main/index/Incidents')?>">Incidents <span id="incident_notif" style="color: red;"></span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="<?php echo site_url('main/index/Personnel')?>">Personnel </a>
@@ -63,6 +63,5 @@
 			})
 		}, 5000 )
 	</script>
-
 </nav>
 
