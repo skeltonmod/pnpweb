@@ -128,6 +128,8 @@
 		</div>
 	</div>
 	<!-- EDIT MODAL -->
+
+
 	<div class="modal fade" id="editBarangayModal" tabindex="-1" role="dialog" aria-labelledby="EditLabel" aria-hidden="true">
 		<div class="modal-dialog " role="document">
 			<div class="modal-content">
@@ -228,7 +230,6 @@
 			]
 		})
 	})
-
 	function getBarangay(location, lat, long){
 		$("#latitude").val(lat)
 		$("#longitude").val(long)
@@ -320,6 +321,8 @@
 			complete: function (e){
 				$("#barangayTable").DataTable().ajax.reload()
 			}
+
+			
 		})
 	}
 </script>

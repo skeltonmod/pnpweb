@@ -30,5 +30,39 @@
 	<div class="d-flex">
 		<button class="btn btn-outline-danger mx-6" id="logout" type="button">Logout</button>
 	</div>
+
+	<script>
+		let newIncidents = 0;
+
+		$('document').ready(function () {  
+			$.ajax({
+				url: "<?php echo site_url()?>/main/count_incidents",
+				method: 'post',
+				dataType: 'json',
+				success: function (response) {
+					newIncidents = response.newIncidents;
+					document.getElementById('incident_notif').innerText = newIncidents;
+				}
+
+			})
+		})
+
+		setInterval(function(){
+			$.ajax({
+				url: "<?php echo site_url()?>/main/count_incidents",
+				method: 'post',
+				dataType: 'json',
+				success: function (response) {
+					if(response.newIncidents > newIncidents){
+						alert('You have new Incidents');
+						newIncidents = response.newIncidents;
+						document.getElementById('incident_notif').innerText = response.newIncidents;
+					}
+				}
+
+			})
+		}, 5000 )
+	</script>
+
 </nav>
 

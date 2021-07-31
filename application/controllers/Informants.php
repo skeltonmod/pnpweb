@@ -80,7 +80,6 @@ class Informants extends CI_Controller
 			"occupation"=>$this->input->post('occupation'),
 			"workaddress"=>$this->input->post('workAddress'),
 			"image"=>$parse_image
-
 		);
 		if(count($this->INFORMANT_MODEL->check_existing($this->input->post('email'))) > 0){
 			$response = array(
@@ -223,7 +222,6 @@ class Informants extends CI_Controller
 	public function get_temp_incident(){
 		$data = $this->INFORMANT_MODEL->get_temp_incidents($this->input->post('userid'));
 		$result = null;
-
 		foreach ($data as $row){
 			$result[] = array(
 				"userid"=>$row->userid,

@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			"serverMethod": "post",
 			"ajax": {
 				"url": "<?php echo site_url()?>/main/get_temp_incident",
-			}s,
+			},
 			"columns":[
 				{data: "id"},
 				{data: "name"},

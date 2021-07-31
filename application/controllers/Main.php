@@ -126,6 +126,7 @@ class Main extends CI_Controller
 
 	}
 
+
 	public function manage_incident(){
 		switch ($this->input->post("key")){
 			case "edit":
@@ -497,8 +498,14 @@ class Main extends CI_Controller
 	}
   
   public function count_incidents(){
-    $result = $this->INCIDENT_MODEL->count_new_incidents();
+    $result = $this->INCIDENT_MODEL->get_incidents();
+    $newIncidents = 0;
 
-    echo json_encode(['incidents' => count($result)]);
+	foreach($result as $res){
+		if($this->INCIDENT_MODEL->checkNew($res->incident_no)[0]->status == strtoupper('acknowledged')){
+			$newIncidents += 1;
+		}
+	}
+	echo json_encode(['newIncidents'=> $newIncidents]);
   }  
 }
