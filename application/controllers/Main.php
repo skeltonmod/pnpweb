@@ -35,11 +35,11 @@ class Main extends CI_Controller
 	}
 
 
-	function getImage($image,$filename){
+	public function getImage($image,$filename){
 
 		$imagefiletype = pathinfo($image,PATHINFO_EXTENSION);
 		$basename = $filename.".".$imagefiletype;
-		$location = "/home/deyji/www/pnpweb/public/informant_images/".$basename;
+		$location = FCPATH.'incident_images/'.$basename;
 
 		// sanitize file
 		$check = getimagesize($_FILES["image"]["tmp_name"]);
@@ -63,22 +63,37 @@ class Main extends CI_Controller
 		return $basename;
 	}
 
+
+
 	// INCIDENT
 	public function getIncidents(){
-		$data = $this->INCIDENT_MODEL->get_incidents();
 		$result = null;
-		foreach ($data as $row){
-			$details = $this->INCIDENT_MODEL->get_incident_details($row->incident_no)[0];
+		$data = $this->INCIDENT_MODEL->get_incidents();
+		if($data != null){
+			foreach ($data as $row){
+				$details = $this->INCIDENT_MODEL->get_incident_details($row->incident_no)[0];
 
+				$result[] = array(
+					"id"=>$row->incident_no,
+					"date"=>$row->incident_date,
+					"location"=>$row->location,
+					"status"=>$details->status,
+					"remarks"=>$row->remarks,
+					"suspect"=>$row->suspect,
+					"victim"=>$row->victim,
+					"image"=>$row->picture,
+				);
+			}
+		}else{
 			$result[] = array(
-				"id"=>$row->incident_no,
-				"date"=>$row->incident_date,
-				"location"=>$row->location,
-				"status"=>$details->status,
-				"remarks"=>$row->remarks,
-				"suspect"=>$row->suspect,
-				"victim"=>$row->victim,
-				"image"=>$row->picture,
+				"id"=> "Empty Data!",
+				"date"=>"Empty Data!",
+				"location"=>"Empty Data!",
+				"status"=>"Empty Data!",
+				"remarks"=>"Empty Data!",
+				"suspect"=>"Empty Data!",
+				"victim"=>"Empty Data!",
+				"image"=>"Empty Data!",
 			);
 		}
 		$response = array(

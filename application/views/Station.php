@@ -158,6 +158,12 @@
 		})
 	})
 	function manageData(id, key){
+		if(key === 'delete'){
+			if(!confirm('Are you sure you want to delete this station?')){
+				return
+			}
+		}
+
 
 		$.ajax({
 			url: `<?php echo site_url()?>/main/manage_station`,

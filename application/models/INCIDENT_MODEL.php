@@ -28,7 +28,9 @@ class INCIDENT_MODEL extends CI_Model
 		$last_id = $this->db->insert_id();
 		$details = array(
 			"incident_no"=>	$last_id,
-			"status"=>($data['temp_id'] == "" ? strtoupper('New') : strtoupper("Acknowledged")),
+			"status"=>(isset($data['temp_id']) ? strtoupper('New') : strtoupper("Acknowledged")),
+			"datetime_acknwldge"=>$data['incident_date'],
+
 		);
 		$this->db->insert('incident_details', $details);
 	}

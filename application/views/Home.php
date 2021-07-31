@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			"serverMethod": "post",
 			"ajax": {
 				"url": "<?php echo site_url()?>/main/get_temp_incident",
-			},
+			}s,
 			"columns":[
 				{data: "id"},
 				{data: "name"},
@@ -119,7 +119,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					}
 
 				}
-			]
+			],
+			'columnDefs':[{
+			"targets": "_all",
+			"defaultContent": "Empty!"
+		}]
+
 		})
 
 	})
@@ -155,7 +160,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					console.log(response)
 				},
 				complete: function (response){
-					alert("Query Successful!")
+					alert("Record Successfully Edited")
 					$("#tableTempIncident").DataTable().ajax.reload()
 					checked_items = []
 				}
