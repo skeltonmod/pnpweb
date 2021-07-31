@@ -132,21 +132,21 @@
 							<form id='frmEditIncident'>
 								<iframe src="../../map.html" id="mapframe" width="470" height="320" seamless></iframe>
 								<div class="mb-3">
-									<input type="text" name="temp_id" id="temp_id" value="0" hidden>
+									<label for="temp_id"></label><input type="text" name="temp_id" id="temp_id" value="0" hidden>
 								</div>
 								<div class="mb-3">
 									<label> Incident Date </label>
-									<input type="date" class="form-control" name="incident_date"
-										   id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_incident_date"></label><input type="date" class="form-control" name="incident_date"
+																				   id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Time </label>
-									<input type="time" class="form-control" name="incident_time"
-										   id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_incident_time"></label><input type="time" class="form-control" name="incident_time"
+																				   id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
 									<label for="edit_remarks">Status</label>
-									<select name="status" id="edit_status" class="form-select">
+									<label for="edit_status"></label><select name="status" id="edit_status" class="form-select">
 										<option value="ACKNOWLEDGED">ACKNOWLEDGED</option>
 										<option value="PENDING">PENDING</option>
 										<option value="FOR INVESTIGATION">INVESTIGATION</option>

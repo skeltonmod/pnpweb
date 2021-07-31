@@ -23,7 +23,6 @@ class INCIDENT_MODEL extends CI_Model
 	}
 
 	public function insert_incident($data){
-    $data['isNew'] = boolval(True);
     $this->db->insert('incidents', $data);
 		$last_id = $this->db->insert_id();
 		$details = array(
@@ -45,7 +44,6 @@ class INCIDENT_MODEL extends CI_Model
 	}
 
   public function edit_incident($data, $id){
-    $data['isNew'] = boolval(False);
     $this->db->where("incident_no", $id);
 		$this->db->update("incidents", $data);
 	}
