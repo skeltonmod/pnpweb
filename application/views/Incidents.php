@@ -12,7 +12,9 @@
 				<div class="card-header">
 					Manage Incident
 					<button type="button" class="btn btn-warning float-end mx-3">Reload</button>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#addIncidentModal" class="btn btn-success float-end">Add</button>
+					<button type="button" data-bs-toggle="modal" data-bs-target="#addIncidentModal"
+							class="btn btn-success float-end">Add
+					</button>
 				</div>
 				<div class="card-body">
 					<table class="table display responsive nowrap" id="incidentTable" style="width: 100%">
@@ -22,7 +24,7 @@
 							<th scope="col">Incident Date</th>
 							<th scope="col">Location</th>
 							<th scope="col">Status</th>
-<!--							<th scope="col">Remarks</th>-->
+							<!--							<th scope="col">Remarks</th>-->
 							<th scope="col">Suspect</th>
 							<th scope="col">Victim</th>
 							<th scope="col">Image</th>
@@ -35,8 +37,9 @@
 			</div>
 		</div>
 	</div>
-<!-- INSERT MODAL -->
-	<div class="modal fade" id="addIncidentModal" tabindex="-1" role="dialog" aria-labelledby="AddLabel" aria-hidden="true">
+	<!-- INSERT MODAL -->
+	<div class="modal fade" id="addIncidentModal" tabindex="-1" role="dialog" aria-labelledby="AddLabel"
+		 aria-hidden="true">
 		<div class="modal-dialog " role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -52,7 +55,7 @@
 					<div class="row">
 
 						<div class="col">
-							<form id='frmIncident' >
+							<form id='frmIncident'>
 								<div class="mb-3">
 									<label> Incident Date </label>
 									<input type="date" class="form-control" name="incident_date" id="incident_date "/>
@@ -65,32 +68,40 @@
 
 								<div class="mb-3">
 									<label> Incident Suspect </label>
-									<input type="text" class="form-control" name="suspect" id="suspect" placeholder="Suspect" />
+									<input type="text" class="form-control" name="suspect" id="suspect"
+										   placeholder="Suspect"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Victim </label>
-									<input type="text" class="form-control" name="victim" id="victim" placeholder="Victim" />
+									<input type="text" class="form-control" name="victim" id="victim"
+										   placeholder="Victim"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Remarks </label>
-									<input type="text" class="form-control input-sm" name="remarks" id="remarks" placeholder="Remarks" />
+									<input type="text" class="form-control input-sm" name="remarks" id="remarks"
+										   placeholder="Remarks"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Latitude </label>
-									<input type="text" class="form-control input-sm" name="latitude" id="latitude" placeholder="Latitude" />
+									<input type="text" class="form-control input-sm" name="latitude" id="latitude"
+										   placeholder="Latitude"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Longitude </label>
-									<input type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude"/>
+									<input type="text" class="form-control" name="longitude" id="longitude"
+										   placeholder="Longitude"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Location </label>
-									<input type="text" class="form-control" name="location" id="location" placeholder="Location"/>
+									<input type="text" class="form-control" name="location" id="location"
+										   placeholder="Location"/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Image </label>
-									<img src="../../incident_images/no_image.png" id="img_save_preview" width="120" height="120">
-									<input type="file" onchange="getImage(this, 'add')" id="file_save_img" name="file_save_img"/>
+									<img src="../../incident_images/no_image.png" id="img_save_preview" width="120"
+										 height="120">
+									<input type="file" onchange="getImage(this, 'add')" id="file_save_img"
+										   name="file_save_img"/>
 								</div>
 
 							</form>
@@ -104,8 +115,9 @@
 			</div>
 		</div>
 	</div>
-<!-- EDIT MODAL -->
-	<div class="modal fade" id="editIncidentModal" tabindex="-1" role="dialog" aria-labelledby="EditLabel" aria-hidden="true">
+	<!-- EDIT MODAL -->
+	<div class="modal fade" id="editIncidentModal" tabindex="-1" role="dialog" aria-labelledby="EditLabel"
+		 aria-hidden="true">
 		<div class="modal-dialog " role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -117,52 +129,69 @@
 
 						<!-- Other half of the modal-body div-->
 						<div class="col">
-							<form id='frmEditIncident' >
+							<form id='frmEditIncident'>
 								<iframe src="../../map.html" id="mapframe" width="470" height="320" seamless></iframe>
 								<div class="mb-3">
 									<input type="text" name="temp_id" id="temp_id" value="0" hidden>
 								</div>
 								<div class="mb-3">
 									<label> Incident Date </label>
-									<input type="date" class="form-control" name="incident_date" id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<input type="date" class="form-control" name="incident_date"
+										   id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
 									<label> Incident Time </label>
-									<input type="time" class="form-control" name="incident_time" id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<input type="time" class="form-control" name="incident_time"
+										   id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
 									<label for="edit_remarks">Status</label>
-									<select name="status" id="edit_status"  class="form-select">
+									<select name="status" id="edit_status" class="form-select">
 										<option value="ACKNOWLEDGED">ACKNOWLEDGED</option>
 										<option value="PENDING">PENDING</option>
 										<option value="FOR INVESTIGATION">INVESTIGATION</option>
 										<option value="SETTLED">SETTLED</option>
 									</select>
-									<!--									<input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" --><?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?><!--/>-->
+									<!--									<input type="text" class="form-control input-sm" name="remarks" id="edit_remarks" placeholder="Remarks" -->
+									<?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?><!--/>-->
 								</div>
 
 								<div class="mb-3">
-									<label for="edit_suspect">Remarks</label><input type="text" class="form-control" name="remarks" id="edit_remarks" placeholder="Remarks"  />
+									<label for="edit_suspect">Remarks</label><input type="text" class="form-control"
+																					name="remarks" id="edit_remarks"
+																					placeholder="Remarks"/>
 								</div>
 
 								<div class="mb-3">
-									<label for="edit_suspect">Suspect</label><input type="text" class="form-control" name="suspect" id="edit_suspect" placeholder="Suspect"  />
+									<label for="edit_suspect">Suspect</label><input type="text" class="form-control"
+																					name="suspect" id="edit_suspect"
+																					placeholder="Suspect"/>
 								</div>
 
 								<div class="mb-3">
-									<label for="edit_victim">Victim</label><input type="text" class="form-control" name="victim" id="edit_victim" placeholder="Victim" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_victim">Victim</label><input type="text" class="form-control"
+																				  name="victim" id="edit_victim"
+																				  placeholder="Victim" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 
 								<div class="mb-3">
-									<label for="edit_latitude">Latitude</label><input type="text" class="form-control input-sm" name="latitude" id="edit_latitude" placeholder="Latitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_latitude">Latitude</label><input type="text"
+																					  class="form-control input-sm"
+																					  name="latitude" id="edit_latitude"
+																					  placeholder="Latitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 
 
 								</div>
 								<div class="mb-3">
-									<label for="edit_longitude">Longitude</label><input type="text" class="form-control" name="longitude" id="edit_longitude" placeholder="Longitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_longitude">Longitude</label><input type="text" class="form-control"
+																						name="longitude"
+																						id="edit_longitude"
+																						placeholder="Longitude" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 								<div class="mb-3">
-									<label for="edit_location">Location</label><input type="text" class="form-control" name="location" id="edit_location" placeholder="Location" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									<label for="edit_location">Location</label><input type="text" class="form-control"
+																					  name="location" id="edit_location"
+																					  placeholder="Location" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
 								</div>
 							</form>
 						</div>
@@ -178,9 +207,7 @@
 </div>
 </body>
 <script>
-	$(document).ready(function (){
-
-		// TODO: Toast popup (intrusive)
+	$(document).ready(function () {
 
 		$("#incidentTable").dataTable({
 			rowReorder: {
@@ -191,11 +218,11 @@
 			"paging": true,
 			"processing": true,
 			"serverMethod": "post",
-			"order": [[ 0, "desc" ]],
+			"order": [[0, "desc"]],
 			"ajax": {
 				"url": "<?php echo site_url()?>/main/getIncidents",
 			},
-			"columns":[
+			"columns": [
 				{data: "id"},
 				{data: "date"},
 				{data: "location"},
@@ -203,34 +230,40 @@
 				// {data: "remarks"},
 				{data: "suspect"},
 				{data: "victim"},
-				{data: "image",
-					render: function (data){
-						let isEmpty = (data === "" ? "no_image.png" : data)
-						return `<img width=50 height=50 src='../../public/informant_images/${isEmpty}' alt="">`;
-					}},
-				{data: "id",
-					// TODO: Acknowledge button
-					render: function (data){
-						return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary">Edit</button>
-								<?php if ($_SESSION['type'] == "Standard"){
-							echo '<button type="button" onclick="manageData(${data}, \'acknowledge\')" class="btn btn-primary">Acknowledge</button>';}
-						else{
-							echo '<button type="button" onclick="manageData(${data}, \'delete\')" class="btn btn-primary">Delete</button>';
-							echo '<button type="button" onclick="manageData(${data}, \'acknowledge\')" class="btn btn-primary">Acknowledge</button>';
+				{
+					data: "image",
+					render: function (data) {
+						let isEmpty = (data === "Empty Data!" ? "no_image.png" : data)
+						return `<img width=50 height=50 src='../../incident_images/${isEmpty}' alt="">`;
+					}
+				},
+				{
+					data: "id",
+					render: function (data) {
+						if(data !== "Empty Data!"){
+							return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary">Edit</button>
+								<button type="button" onclick="manageData(${data}, 'acknowledge')" class="btn btn-primary">Acknowledge</button>
+								<?php if ($_SESSION['type'] == "SuperAdmin") {
+								echo '<button type="button" onclick="manageData(${data}, \'delete\')" class="btn btn-primary">Delete</button>';
+							}
+							?>`
+						}else{
+							return 'Empty!'
 						}
-						?>`;
-					}},
+					}
+
+				},
 			]
 		})
 	})
 
-	function getBarangay(location, lat, long){
+	function getBarangay(location, lat, long) {
 		$("[name='latitude']").val(lat)
 		$("[name='longitude']").val(long)
 		$("[name='location']").val(location)
 	}
 
-	$("#addBtn").on("click", function (e){
+	$("#addBtn").on("click", function (e) {
 		e.preventDefault();
 		let formData = new FormData(document.getElementById("frmIncident"));
 		formData.append("image", $("#file_save_img")[0].files[0])
@@ -241,16 +274,19 @@
 			contentType: false,
 			processData: false,
 			data: formData,
-			success: function (response){
+			success: function (response) {
 				console.log(response)
 
+			},
+			complete: function(e){
+				$("#incidentTable").DataTable().ajax.reload()
 			}
 
 		})
 	})
 
 
-	function getImage(input, key){
+	function getImage(input, key) {
 		if (input.files && input.files[0]) {
 			let reader = new FileReader();
 			reader.onload = function (e) {
@@ -263,7 +299,7 @@
 		}
 	}
 
-	$('#saveBtn').on("click", function (e){
+	$('#saveBtn').on("click", function (e) {
 		e.preventDefault();
 		let formData = new FormData(document.getElementById("frmEditIncident"));
 		formData.append("key", "update")
@@ -275,12 +311,12 @@
 			contentType: false,
 			processData: false,
 			data: formData,
-			success: function (response){
+			success: function (response) {
 				console.log(response)
 				alert("Incident Edited Successfully")
 			},
 
-			complete: function (e){
+			complete: function (e) {
 				$("#incidentTable").DataTable().ajax.reload()
 				alert("Record Edited Successfully")
 			}
@@ -288,7 +324,7 @@
 		})
 	})
 
-	function manageData(id, key){
+	function manageData(id, key) {
 		$.ajax({
 			url: `<?php echo site_url()?>/main/manage_incident`,
 			method: 'post',
@@ -297,8 +333,8 @@
 				id: id,
 				key: key
 			},
-			success: function (response){
-				switch (key){
+			success: function (response) {
+				switch (key) {
 					case "edit":
 						let data = response[0]
 						console.log(data.incident_date)
@@ -319,15 +355,14 @@
 						alert("Incident Deleted Successfully")
 						break;
 
-						case "acknowledge":
-							alert("Incident Acknowledged!")
-							break;
+					case "acknowledge":
+						alert("Incident Acknowledged!")
+						break;
 				}
 
 
-
 			},
-			complete: function (e){
+			complete: function (e) {
 				$("#incidentTable").DataTable().ajax.reload()
 			}
 
