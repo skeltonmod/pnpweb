@@ -33,7 +33,7 @@
 
 	<script>
 		let newIncidents = 0;
-
+		let nearbyIncidents = [];
 		$('document').ready(function () {  
 			$.ajax({
 				url: "<?php echo site_url()?>/main/count_incidents",
@@ -63,31 +63,20 @@
 			})
 		}, 5000 )
 
-		//setInterval(function(){
-		//	$.ajax({
-		//		url: "<?php //echo site_url()?>///main/getNearestIncident",
-		//		method: 'post',
-		//		dataType: 'json',
-		//		success: function (response) {
-		//			console.log(response);
-		//		}
-		//
-		//	})
-		//
-		//}, 2000)
-
-
-		$(document).ready(function (){
+		setInterval(function (){
 			$.ajax({
 				url: "<?php echo site_url()?>/main/getNearestIncident",
 				method: 'post',
 				dataType: 'json',
 				success: function (response) {
-					console.log(response);
+
+
+
+					nearbyIncidents = response
 				}
 
 			})
-		})
+		}, 3000)
 
 	</script>
 </nav>

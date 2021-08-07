@@ -542,10 +542,11 @@ class Main extends CI_Controller
 	foreach ($incidents as $incident){
 		$distance = $this->checkDistance($incident->latitude, $incident->longitude, $current_station[0]->latitude, $current_station[0]->longitude);
 		if($distance <= 10){
-			$nearest_incidents = array(
-				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM Away",
+			$nearest_incidents[] = array(
+				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM",
 				"incident_id" => $incident->id,
-				"date" => $incident->date
+				"date" => $incident->date,
+				"barangay"=>$incident->barangay
 
 			);
 		}

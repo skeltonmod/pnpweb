@@ -25,6 +25,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				}
 			}
 
+			if(isset($_SESSION)){
+				// Only for station users
+				if($_SESSION['type'] == "Standard"){
+					echo '<li class="nav-item" role="presentation">
+				<button class="nav-link" id="pills-nearby-tab" data-bs-toggle="pill" data-bs-target="#pills-nearby" type="button" role="tab" aria-controls="pills-nearby" aria-selected="false">Nearby Incidents</button>
+			</li>';
+				}
+			}
+
 			?>
 		</ul>
 		<div class="tab-content" id="pills-tabContent">
@@ -86,16 +95,72 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}
 
 			?>
+			<div class="tab-pane fade" id="pills-nearby" role="tabpanel" aria-labelledby="pills-nearby-tab">
+
+				<div class="card">
+					<div class="card-header">
+						<h4>Nearby Incidents
+						</h4>
+					</div>
+					<div class="card-body">
+						<div class="accordion" id="nearbyIncident">
+							<h3>Loading Nearby...</h3>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
 		</div>
 
 	</div>
 
 </div>
 </body>
-<script>
+<script defer>
 	let checked_items = []
-	$(document).ready(function (){
+	let nearbyIncidentCount = 0;
 
+	// call it again
+	setInterval(function (){
+		let html = ""
+
+		if(nearbyIncidents === null){
+			$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
+		}else{
+			if(nearbyIncidents.length !== nearbyIncidentCount){
+				nearbyIncidentCount = nearbyIncidents.length;
+				$.each(nearbyIncidents, function (index, value){
+					// console.log(index)
+					html += `
+
+			<div class="accordion-item">
+    <h2 class="accordion-header" id="${index}_heading">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collpase_${index}" aria-expanded="false" aria-controls="collpase_${index}">
+        Incident #${index}
+      </button>
+    </h2>
+    <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
+      <div class="accordion-body">
+        An incident nearby has been reported at approximately <strong>${value.distance}</strong> away, located in <strong>${value.barangay}</strong>
+      </div>
+    </div>
+  </div>
+			`
+				})
+
+				$("#nearbyIncident").html(html);
+			}
+		}
+
+
+
+
+
+	}, 2000)
+
+	$(document).ready(function (){
 		$("#tableTempIncident").dataTable({
 			lengthChange: true,
 			responsive: true,
