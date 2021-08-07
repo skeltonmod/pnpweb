@@ -59,7 +59,7 @@
 
 
 		$.ajax({
-			url: "<?php echo site_url()?>/main/getBarangay",
+			url: "<?php echo site_url()?>/main/getStation",
 			method: 'post',
 			dataType: 'json',
 			success: function (response){
@@ -67,7 +67,7 @@
 					let lat = String(value.location).split('/')[0]
 					let long = String(value.location).split('/')[1]
 					L.marker([Number(lat), Number(long)], {
-					}).addTo(map).bindPopup(`${value.barangay_name}`)
+					}).addTo(map).bindPopup(`${value.station_name}`)
 					L.circle([Number(lat), Number(long)], {
 						color: 'red',
 						fillOpacity: 0.01,

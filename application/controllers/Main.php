@@ -35,6 +35,16 @@ class Main extends CI_Controller
 	}
 
 
+	private function checkDistance($lat1, $long1, $lat2, $long2){
+		if($lat1 == $lat2 && $long1 == $long2) return 0;
+
+		$theta = $long1 - $long2;
+		$distance = rad2deg(acos(sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta))));
+		$miles = $distance * 60 * 1.1515;
+
+		return $miles * 1.609344;
+	}
+
 	public function getImage($image,$filename){
 
 		$imagefiletype = pathinfo($image,PATHINFO_EXTENSION);
@@ -162,7 +172,6 @@ class Main extends CI_Controller
 				$this->INCIDENT_MODEL->edit_incident($data, $this->input->post("id"));
 				$this->INCIDENT_MODEL->edit_incident_detail($data_details);
 				// Edit the temp_incident for mobile users
-
 				if($this->input->post('temp_id') != null){
 					$this->INFORMANT_MODEL->edit_temp_incident($this->input->post('temp_id'), $temp_data_details);
 				}
@@ -392,22 +401,36 @@ class Main extends CI_Controller
 
 		$result = null;
 
-		foreach ($data as $row){
-			$location_name = $this->INFORMANT_MODEL->get_station_data($row->barangay)[0]->barangay_name;
-			$contact = $this->INFORMANT_MODEL->get_informant($row->userid)[0]->mobilenumber;
-			$result[] = array(
-				"id"=>$row->id,
-				"name"=>$row->informant_name,
-				"type"=>$row->type,
-				"location"=>$row->latitude."/".$row->longitude,
-				"date"=>$row->date,
-				"time"=>$row->time,
-				"barangay"=>$location_name,
-				"station"=>$row->station,
-				"contact"=>$contact,
-				"image"=>$row->image,
+		if($data != null){
+			foreach ($data as $row){
+				$location_name = $this->INFORMANT_MODEL->get_station_data($row->barangay)[0]->barangay_name;
+				$contact = $this->INFORMANT_MODEL->get_informant($row->userid)[0]->mobilenumber;
+				$result[] = array(
+					"id"=>$row->id,
+					"name"=>$row->informant_name,
+					"type"=>$row->type,
+					"location"=>$row->latitude."/".$row->longitude,
+					"date"=>$row->date,
+					"time"=>$row->time,
+					"barangay"=>$location_name,
+					"station"=>$row->station,
+					"contact"=>$contact,
+					"image"=>$row->image,
 
+				);
+			}
+		}else{
+			$result[] = array(
+				"id"=> "Empty Data!",
+				"date"=>"Empty Data!",
+				"location"=>"Empty Data!",
+				"status"=>"Empty Data!",
+				"remarks"=>"Empty Data!",
+				"suspect"=>"Empty Data!",
+				"victim"=>"Empty Data!",
+				"image"=>"Empty Data!",
 			);
+
 		}
 		$response = array(
 			"data"=>$result
@@ -510,5 +533,24 @@ class Main extends CI_Controller
 		}
 	}
 	echo json_encode(['newIncidents'=> $newIncidents]);
-  }  
+  }
+
+  public function getNearestIncident(){
+	$incidents = $this->INFORMANT_MODEL->get_all();
+	$current_station = $this->STATION_MODEL->get_current_station($_SESSION['station_id']);
+	$nearest_incidents = null;
+	foreach ($incidents as $incident){
+		$distance = $this->checkDistance($incident->latitude, $incident->longitude, $current_station[0]->latitude, $current_station[0]->longitude);
+		if($distance <= 10){
+			$nearest_incidents = array(
+				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM Away",
+				"incident_id" => $incident->id,
+				"date" => $incident->date
+
+			);
+		}
+	}
+
+	echo json_encode($nearest_incidents);
+  }
 }

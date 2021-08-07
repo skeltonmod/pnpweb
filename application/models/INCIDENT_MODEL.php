@@ -83,4 +83,13 @@ class INCIDENT_MODEL extends CI_Model
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	public function get_all_incidents(){
+		$this->db->select('*');
+		$this->db->from('incidents');
+		$this->db->join("incident_details", "incident_details.incident_no = incidents.incident_no", "left");
+		$this->db->order_by('unique_id', 'desc');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }
