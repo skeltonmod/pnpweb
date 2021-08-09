@@ -116,7 +116,7 @@ class Main extends CI_Controller
 		$image = $_FILES['image']['name'];
 
 		$parse_image = $this->getImage($image, "INCIDENT_".$this->input->post('incident_date')."_".$this->input->post('victim'));
-
+		$station_id = $this->BARANGAY_MODEL->get_barangay_current($this->input->post('location'))[0]->station_id;
 		$data = array(
 			"incident_date"=> $this->input->post('incident_date'),
 			"incident_time"=> $this->input->post('incident_time'),
@@ -125,9 +125,8 @@ class Main extends CI_Controller
 			"location"=> $this->input->post('location'),
 			"suspect"=> $this->input->post('suspect'),
 			"victim"=> $this->input->post('victim'),
-			'police_station_no' 		=> 2,
-			'personnel_id' 			=> 2000,
-			'informant_id' 			=> 1000,
+			'police_station_no' 		=> $station_id,
+			'personnel_id' 			=> $_SESSION['personnel_id'],
 			"picture"=> $parse_image,
 			"remarks"=> "",
 
@@ -321,7 +320,6 @@ class Main extends CI_Controller
 				"canonical_name"=>$row->canonical_name,
 				"location"=>$row->lat."/".$row->long,
 				"remarks"=>$row->remarks
-
 			);
 		}
 		$response = array(
@@ -494,7 +492,8 @@ class Main extends CI_Controller
 			"incidents"=> $this->input->post('incidents'),
 			"dateAt"=>date('Y-m-d', strtotime(str_replace('-', '/', $date)))
 		);
-		$this->REPORTS_MODEL->insert_report($data);
+		echo $this->REPORTS_MODEL->insert_report($data);
+
 	}
 
 	public function get_report(){
@@ -541,7 +540,7 @@ class Main extends CI_Controller
 	$nearest_incidents = null;
 	foreach ($incidents as $incident){
 		$distance = $this->checkDistance($incident->latitude, $incident->longitude, $current_station[0]->latitude, $current_station[0]->longitude);
-		if($distance <= 10){
+		if($distance <= 5){
 			$nearest_incidents[] = array(
 				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM",
 				"incident_id" => $incident->id,
@@ -549,6 +548,7 @@ class Main extends CI_Controller
 				"barangay"=>$incident->barangay
 
 			);
+			
 		}
 	}
 

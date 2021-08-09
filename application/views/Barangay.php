@@ -252,7 +252,7 @@
 
 			}, complete: function (e){
 				$("#barangayTable").DataTable().ajax.reload()
-				alert("Record Edited Successfully")
+				alert("Record Saved Successfully")
 			}
 
 		})
