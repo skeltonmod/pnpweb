@@ -10,6 +10,23 @@ class BARANGAY_MODEL extends CI_Model
 		$this->load->database();
 	}
 
+	public function get_barangay_name($canonical){
+		$this->db->select("*");
+		$this->db->from("stations_coverage");
+		$this->db->where("canonical_name", $canonical);
+		$this->db->order_by("canonical_name", "asc");
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function get_all_barangay(){
+		$this->db->select("*");
+		$this->db->from("stations_coverage");
+		$this->db->order_by("barangay_id", "desc");
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function get_barangay(){
 		$this->db->select("*");
 		$this->db->from("stations_coverage");
@@ -28,7 +45,9 @@ class BARANGAY_MODEL extends CI_Model
 		$this->db->update("stations_coverage", $data);
 	}
 
-		public function get_current_barangay($id){
+
+
+	public function get_current_barangay($id){
 		$this->db->select("*");
 		$this->db->from("stations_coverage");
 		$this->db->where("barangay_id", $id);

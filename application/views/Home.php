@@ -123,42 +123,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	let nearbyIncidentCount = 0;
 
 	// call it again
-	setInterval(function (){
-		let html = ""
-
-		if(nearbyIncidents === null){
-			$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
-		}else{
-			if(nearbyIncidents.length !== nearbyIncidentCount){
-				nearbyIncidentCount = nearbyIncidents.length;
-				$.each(nearbyIncidents, function (index, value){
-					// console.log(index)
-					html += `
-
-			<div class="accordion-item">
-    <h2 class="accordion-header" id="${index}_heading">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collpase_${index}" aria-expanded="false" aria-controls="collpase_${index}">
-        Incident #${index}
-      </button>
-    </h2>
-    <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
-      <div class="accordion-body">
-        An incident nearby has been reported at approximately <strong>${value.distance}</strong> away, located in <strong>${value.barangay}</strong>
-      </div>
-    </div>
-  </div>
-			`
-				})
-
-				$("#nearbyIncident").html(html);
-			}
-		}
-
-
-
-
-
-	}, 2000)
+	// setInterval(function (){
+	// 	let html = ""
+  //
+	// 	if(nearbyIncidents === null){
+	// 		$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
+	// 	}else{
+	// 		if(nearbyIncidents.length !== nearbyIncidentCount){
+	// 			nearbyIncidentCount = nearbyIncidents.length;
+	// 			$.each(nearbyIncidents, function (index, value){
+	// 				// console.log(index)
+	// 				html += `
+  //
+	// 		<div class="accordion-item">
+  //   <h2 class="accordion-header" id="${index}_heading">
+  //     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collpase_${index}" aria-expanded="false" aria-controls="collpase_${index}">
+  //       Incident #${index}
+  //     </button>
+  //   </h2>
+  //   <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
+  //     <div class="accordion-body">
+  //       An incident nearby has been reported at approximately <strong>${value.distance}</strong> away, located in <strong>${value.barangay}</strong>
+  //     </div>
+  //   </div>
+  // </div>
+	// 		`
+	// 			})
+  //
+	// 			$("#nearbyIncident").html(html);
+	// 		}
+	// 	}
+  //
+  //
+  //
+  //
+  //
+	// }, 2000)
 
 	$(document).ready(function (){
 		$("#tableTempIncident").dataTable({

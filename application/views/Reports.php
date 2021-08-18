@@ -89,7 +89,7 @@
 						</div>
 						<div class="card-body">
 							<form id="frmGetReports">
-
+								<p id="showState"> </p>
 								<div class="mb-3">
 									<label for="findMonth">
 										Month
@@ -127,7 +127,7 @@
 									<div class="col-sm-1 mb-3">
 										<button type="button" name="predict" id="predict" class="btn btn-primary">Predict</button>
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 										<button type="button" id="addBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReportsModal">Add No. of Incidents</button>
 									</div>
 								</div>
@@ -241,7 +241,7 @@
 
 	$("#saveBtn").on('click', function (e){
 		let formData = new FormData(document.getElementById('frmAddReports'));
-
+		alert("Incident Successfully Saved!");
 		$.ajax({
 			url: `<?php echo site_url()?>/main/insert_report`,
 			method: 'post',
@@ -250,7 +250,7 @@
 			processData: false,
 			data: formData,
 			success: function (response){
-
+				$('#showState').text("Successfully Saved");
 			}
 		})
 	});

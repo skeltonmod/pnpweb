@@ -22,6 +22,7 @@ class Main extends CI_Controller
 		$this->load->model("STATION_MODEL");
 		$this->load->model("INFORMANT_MODEL");
 		$this->load->model("REPORTS_MODEL");
+		$this->load->helper('file');
 	}
 
 
@@ -72,9 +73,6 @@ class Main extends CI_Controller
 		chmod($location, 0777);
 		return $basename;
 	}
-
-
-
 	// INCIDENT
 	public function getIncidents(){
 		$result = null;
@@ -116,7 +114,7 @@ class Main extends CI_Controller
 		$image = $_FILES['image']['name'];
 
 		$parse_image = $this->getImage($image, "INCIDENT_".$this->input->post('incident_date')."_".$this->input->post('victim'));
-
+		$station_id = $this->BARANGAY_MODEL->get_barangay_name($this->input->post('location'))[0]->station_id;
 		$data = array(
 			"incident_date"=> $this->input->post('incident_date'),
 			"incident_time"=> $this->input->post('incident_time'),
@@ -125,9 +123,8 @@ class Main extends CI_Controller
 			"location"=> $this->input->post('location'),
 			"suspect"=> $this->input->post('suspect'),
 			"victim"=> $this->input->post('victim'),
-			'police_station_no' 		=> 2,
-			'personnel_id' 			=> 2000,
-			'informant_id' 			=> 1000,
+			'police_station_no' 		=> $station_id,
+			'personnel_id' 			=> $_SESSION['personnel_id'],
 			"picture"=> $parse_image,
 			"remarks"=> "",
 
@@ -135,7 +132,6 @@ class Main extends CI_Controller
 		echo $this->INCIDENT_MODEL->insert_incident($data);
 
 	}
-
 
 	public function manage_incident(){
 		switch ($this->input->post("key")){
@@ -440,7 +436,6 @@ class Main extends CI_Controller
 
 	public function move_incident(){
 		if($this->input->post('mode') == "accept"){
-
 			// Do the Transfer
 			for($i=0; $i < count($this->input->post('items')); ++$i){
 				echo $i;
@@ -460,14 +455,15 @@ class Main extends CI_Controller
 					"picture"=>$result->image,
 					"temp_id"=>$this->input->post('items')[$i],
 				);
-
+				// Alert first
+				$this->alertNearest($data);
 //				Insert to other table
-				$this->INCIDENT_MODEL->insert_incident($data);
+//				$this->INCIDENT_MODEL->insert_incident($data);
 				// Change temp incident status
-				$data = array(
-					"status"=>strtoupper("Acknowledged")
-				);
-				$this->INFORMANT_MODEL->edit_temp_incident($result->id, $data);
+//				$data = array(
+//					"status"=>strtoupper("Acknowledged")
+//				);
+//				$this->INFORMANT_MODEL->edit_temp_incident($result->id, $data);
 
 			}
 
@@ -480,7 +476,6 @@ class Main extends CI_Controller
 				$this->INFORMANT_MODEL->decline_incident($this->input->post('items')[$i], $data);
 			}
 		}
-
 	}
 
 	// Insert Report
@@ -534,24 +529,49 @@ class Main extends CI_Controller
 	}
 	echo json_encode(['newIncidents'=> $newIncidents]);
   }
+//	public function printJSON($data){
+//		$file_name = 'nearest.json';
+//		$location = FCPATH.'incident_images/'.$file_name;
+//
+//		$nearest_incident_data = array(
+//			"temp_id"=>$data['temp_id'],
+//			"station_id"=>$data['station_id'],
+//			'barangay_name'=>$data['canonical_name'],
+//			'distance'=>$data['distance']
+//		);
+//		// check if the station is already in the json file
+//		$tempArray = json_decode(file_get_contents($location));
+//
+//		foreach ($tempArray as $temp){
+//			if($temp->temp_id == $data['temp_id']){
+//				echo "Incident Alreay Exist in json file";
+//				return;
+//			}
+//		}
+//
+//		array_push($tempArray, $nearest_incident_data);
+//		file_put_contents($location, json_encode($tempArray, JSON_PRETTY_PRINT));
+//		chmod($location, 0777);
+//	}
 
-  public function getNearestIncident(){
-	$incidents = $this->INFORMANT_MODEL->get_all();
-	$current_station = $this->STATION_MODEL->get_current_station($_SESSION['station_id']);
-	$nearest_incidents = null;
-	foreach ($incidents as $incident){
-		$distance = $this->checkDistance($incident->latitude, $incident->longitude, $current_station[0]->latitude, $current_station[0]->longitude);
-		if($distance <= 10){
-			$nearest_incidents[] = array(
-				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM",
-				"incident_id" => $incident->id,
-				"date" => $incident->date,
-				"barangay"=>$incident->barangay
+  public function alertNearest($incident){
+		// basically, get the nearest station from the parameter above
+	  $barangays = $this->STATION_MODEL->get_station();
+//	  $nearest_station = array();
+	  $distance_list = array();
+	  $station_list = array();
 
-			);
-		}
-	}
-
-	echo json_encode($nearest_incidents);
+	  foreach ($barangays as $barangay){
+			$distance = $this->checkDistance($incident['latitude'], $incident['longitude'], $barangay->latitude, $barangay->longitude);
+//		  	$nearest_station[] = array(
+//			  "distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM",
+//			  "distance_data" => (intval($distance) != 0 ? intval($distance): number_format($distance, 2)),
+//			  "station_id" => $barangay->station_id,
+//			  "temp_id"=>$incident['temp_id'],
+//		  );
+		  $distance_list[] = $distance;
+		  $station_list[] = $barangay->station_id;
+	  }
+	  $station_list[array_search(min($distance_list), $distance_list)];
   }
 }
