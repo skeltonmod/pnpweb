@@ -84,7 +84,7 @@ class Excel extends CI_Controller
 		$writer = new Ods($spreadsheet);
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
-		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
+		header('Content-Disposition: attachment;filename="'. $filename .'.ods"');
 		header('Cache-Control: max-age=0');
 
 		$writer->save('php://output');
@@ -110,6 +110,7 @@ class Excel extends CI_Controller
 		}
 		// CSV writer
 		$csv_writer = new Csv($spreadsheet);
+		$directory = base_url("prediction/");
 		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
 		header('Cache-Control: max-age=0');
 

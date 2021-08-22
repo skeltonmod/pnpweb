@@ -42,7 +42,7 @@
 										</select>
 									</div>
 
-									<div class="mb-3">
+									<div class="mb-3"> <!-- Add No. of Incidents -->
 										<label for="findYear">Year</label><select name="year" id="addYear" class="form-select">
 										</select>
 									</div>
@@ -71,6 +71,72 @@
 				</div>
 			</div>
 		</div>
+
+		<!--Modal Add Predicted Incidents -->
+		<div class="modal fade" id="Modal_addPredictedIncident" tabindex="-1" role="dialog" aria-labelledby="AddLabel" aria-hidden="true">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Predicted Incidents Entry Form</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+
+							<div class="col">
+								<form id='pred_frmAddReports'>
+
+									<div class="mb-3">
+										<label for="findMonth">
+											Month
+										</label>
+										<select name="month" id="pred_addMonths"  class="form-select">
+											<option value="January">January</option>
+											<option value="February">February</option>
+											<option value="March">March</option>
+											<option value="April">April</option>
+											<option value="May">May</option>
+											<option value="June">June</option>
+											<option value="July">July</option>
+											<option value="August">August</option>
+											<option value="September">September</option>
+											<option value="October">October</option>
+											<option value="November">November</option>
+											<option value="December">December</option>
+										</select>
+									</div>
+
+									<div class="mb-3"> <!-- Add No. of Incidents -->
+										<label for="findYear">Year</label><select name="year" id="pred_addYear" class="form-select">
+										</select>
+									</div>
+
+									<div class="mb-3">
+										<label for="findBarangay">
+											Barangay
+										</label>
+										<select name="barangay" id="pred_addBarangay"  class="form-select">
+										</select>
+									</div>
+									<div class="mb-3">
+										<label for="addIncidents">
+											Predicted Incidents
+										</label>
+										<input name="incidents" id="pred_addIncidents" class="form-control" type="number">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" id="pred_saveBtn" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</div> <!-- END of Add Predicted Incident Modal -->
+
 		<div class="row">
 			<ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
 				<li class="nav-item" role="presentation">
@@ -110,7 +176,7 @@
 									</select>
 								</div>
 
-								<div class="mb-3">
+								<div class="mb-3"> <!--Main Reports view -->
 									<label for="findYear">Year</label><select name="year" id="findYear" class="form-select">
 									</select>
 								</div>
@@ -129,6 +195,9 @@
 									</div>
 									<div class="col-sm-3">
 										<button type="button" id="addBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReportsModal">Add No. of Incidents</button>
+									</div>
+									<div>
+										<button type="button" id="btnAdd_predicted_incidents" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal_addPredictedIncident">Add Predicted Incidents</button>
 									</div>
 								</div>
 
@@ -163,7 +232,7 @@
 										</select>
 									</div>
 									<div class="col-sm-2">
-										<select name="year" id="findYearFrom"  class="form-select">
+										<select name="yearTo" id="findYearFrom"  class="form-select">
 										</select>
 									</div>
 
@@ -222,10 +291,17 @@
 
 	$(document).ready(function(){
 		let date = new Date();
-		for(let i = 0; i <= 11; ++i){
-			$("select[name='year']").append(`<option value="${date.getFullYear() - i}">${date.getFullYear() - i}</option>`)
-			$("select[name='yearTo']").append(`<option value="${date.getFullYear() - i}">${date.getFullYear() - i}</option>`)
+
+
+		//adding value to select year
+		for(let i = 0; i < 2; i++){ 
+			let curr_year = date.getFullYear();
+			$("select[name='year']").append(`<option value="${ curr_year + i }">
+												${ curr_year + i }
+								    </option>`)
 		}
+			
+		
 		$.ajax({
 			url: "<?php echo site_url()?>/main/getBarangay",
 			method: 'post',
@@ -296,12 +372,36 @@
 	})
 
 	$("#predict").on('click', function (e){
+		alert("<?php //echo base_url() ?>");
 		let data = {
 			"date": `${$("#findMonth").val()}_01_${$("#findYear").val()}`,
 			"barangay": `${$("#findBarangay").val()}`
 		}
 		window.location.href = `<?php echo site_url()?>/excel/csv?data=${JSON.stringify(data)}`
 	})
+
+	$('#pred_saveBtn').on('click', function(e){
+		e.preventDefault();
+		let mnths = $('#pred_addMonths').val();
+		let yr = $('#pred_addYear').val();
+		let pred_num = $('#pred_addIncidents').val();
+		let tmp = $('#pred_addBarangay').val().split("_");
+		let brgy_id = tmp[0];
+		let brgy_nm = tmp[1];
+
+		$.ajax({
+			url: `<?php echo site_url("main/save-prediction"); ?>`,
+			method: "post",
+			data: {month: mnths, year: yr, barangay_id: brgy_id, barangay_name: brgy_nm, predicted_number: pred_num},
+			success: function(result){
+				alert("Successfully Saved!");
+			}
+		});
+	})
+
+	$('#btnAdd_predicted_incidents').on('click', function(){
+		$('#pred_addIncidents').val("");
+	});
 </script>
 
 </html>
