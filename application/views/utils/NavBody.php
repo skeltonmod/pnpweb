@@ -63,17 +63,9 @@
 			})
 		}, 5000 )
 
-		//setInterval(function (){
-		//	$.ajax({
-		//		url: "<?php //echo site_url()?>///main/getNearestIncident",
-		//		method: 'post',
-		//		dataType: 'json',
-		//		success: function (response) {
-		//			nearbyIncidents = response
-		//		}
+		// setInterval(function (){
 		//
-		//	})
-		//}, 3000)
+		// }, 3000)
 
 	</script>
 </nav>
