@@ -157,7 +157,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </h2>
     <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
       <div class="accordion-body">
-        An incident nearby has been reported <strong>${value.station_id}</strong>
+        <p>An incident nearby has been reported in <strong>${value.barangay}</strong> by: <strong>${value.informant_name}</strong> on <strong>${value.date}</strong></p>
+        <p><strong>Station ${value.station}</strong> has been notified</p>
+
       </div>
     </div>
   </div>`
