@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 
 		.navbar-light .navbar-nav .nav-link {
-			color: rgb(71 0 0);
+			color: rgb(255 255 255);
 		}
 
 		.card-header {
@@ -37,6 +37,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			margin-bottom: 0;
 			background-color: rgb(230 0 0 / 100%);
 			border-bottom: 1px solid rgb(146 0 0 / 100%);
+			color: white;
 		}
 
 		.card-body {
@@ -131,6 +132,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			border-radius: .25rem;
 			outline: 5px;
 			box-shadow: 1px 1px 5px black;
+		}
+
+
+		.accordion-button:not(.collapsed) {
+			color: #ffffff;
+			background-color: #e7f1ff;
+			box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
+		}
+
+
+		.accordion-button:not(.collapsed) {
+			padding: .5rem 1rem;
+			margin-bottom: 0;
+			background-color: rgb(230 0 0);
+			border-bottom: 1px solid rgb(146 0 0 / 100%);
+		}
+
+		 .accordion-button.collapsed {
+			padding: .5rem 1rem;
+			margin-bottom: 0;
+			 color: #ffffff;
+			background-color: rgb(230 0 0 / 100%);
+			border-bottom: 1px solid rgb(146 0 0 / 100%);
 		}
 	</style>
 </head>
