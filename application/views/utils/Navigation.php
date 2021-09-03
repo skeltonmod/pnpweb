@@ -15,7 +15,124 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/cr-1.5.4/kt-2.6.2/r-2.2.9/sp-1.3.0/sl-1.3.3/datatables.min.js"></script>
+
 	<title>COCPO Web Dashboard</title>
+	<style>
+		.bg-light{
+			background-color: red !important;
+		}
+
+		.btn-danger{
+			color: #fff;
+			background-color: #ff0000;
+			border-color: #000000;
+		}
+
+		.navbar-light .navbar-nav .nav-link {
+			color: rgb(71 0 0);
+		}
+
+		.card-header {
+			padding: .5rem 1rem;
+			margin-bottom: 0;
+			background-color: rgb(230 0 0 / 100%);
+			border-bottom: 1px solid rgb(146 0 0 / 100%);
+		}
+
+		.card-body {
+			flex: 1 1 auto;
+			padding: 1rem 1rem;
+			background-color: #e0e0e0;
+			border-color: antiquewhite;
+		}
+
+		.btn-warning {
+			color: #fff;
+			background-color: #ff0000;
+			border-color: #000000;
+		}
+
+		.btn-warning:hover {
+			color: #fff;
+			background-color: #ff5757;
+			border-color: #c34c13;
+		}
+
+		.btn-success {
+			color: #fff;
+			background-color: #ff0000;
+			border-color: #000000;
+		}
+		.btn-success:hover {
+			color: #fff;
+			background-color: #ff5757;
+			border-color: #c34c13;
+		}
+
+		.btn-primary:hover {
+			color: #fff;
+			background-color: #ff5757;
+			border-color: #c34c13;
+		}
+
+		.btn-primary {
+			color: #fff;
+			background-color: #ff0000;
+			border-color: #000000;
+		}
+
+		.modal-content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			pointer-events: auto;
+			background-color: #fff;
+			background-clip: padding-box;
+			border: 1px solid rgba(0,0,0,.2);
+			border-radius: .3rem;
+			outline: 5px;
+			box-shadow: 1px 1px 9px black;
+		}
+		.h4, h4 {
+				font-size: 1.5rem;
+				color: white;
+			}
+		.nav-link {
+			display: block;
+			padding: .5rem 1rem;
+			color: #ffffff;
+			text-decoration: none;
+			transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+		}
+
+		.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+			color: #fff;
+			background-color: #b32808;
+		}
+
+		.nav-link {
+			display: block;
+			padding: .5rem 1rem;
+			color: #c31414;
+			text-decoration: none;
+			transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+		}
+
+		.card {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			word-wrap: break-word;
+			background-color: #fff;
+			background-clip: border-box;
+			border: 1px solid rgba(0,0,0,.125);
+			border-radius: .25rem;
+			outline: 5px;
+			box-shadow: 1px 1px 5px black;
+		}
+	</style>
 </head>
 
 	<body>
