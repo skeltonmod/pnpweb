@@ -99,11 +99,18 @@ class INCIDENT_MODEL extends CI_Model
 
 	public function get_nearest(){
 		$this->db->select('*');
-		$this->db->from('temp_nearest_station');
-		$this->db->join("temp_incidents", "temp_incidents.id = temp_nearest_station.incident_id", "left");
+		$this->db->from('temp_incidents');
+		$this->db->join("temp_nearest_station", "temp_nearest_station.incident_id = temp_incidents.id", "inner");
 		$this->db->order_by('temp_nearest_station.id', 'desc');
-		$this->db->where('station_id', $_SESSION['station_id']);
+		$this->db->where('station_id ='. $_SESSION['station_id']. " AND temp_nearest_station.status = 1");
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	public function delist($id){
+		$this->db->where("id", $id);
+		$this->db->update("temp_nearest_station", array(
+			"status"=>0
+		));
 	}
 }

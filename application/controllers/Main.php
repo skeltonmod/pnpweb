@@ -457,12 +457,12 @@ class Main extends CI_Controller
 				// Alert first
 				$this->alertNearest($data);
 //				Insert to other table
-//				$this->INCIDENT_MODEL->insert_incident($data);
-				// Change temp incident status
-//				$data = array(
-//					"status"=>strtoupper("Acknowledged")
-//				);
-//				$this->INFORMANT_MODEL->edit_temp_incident($result->id, $data);
+				$this->INCIDENT_MODEL->insert_incident($data);
+//				 Change temp incident status
+				$data = array(
+					"status"=>strtoupper("Acknowledged")
+				);
+				$this->INFORMANT_MODEL->edit_temp_incident($result->id, $data);
 
 			}
 
@@ -552,7 +552,20 @@ class Main extends CI_Controller
 
   public function getNearest(){
 		if($_SESSION['type'] != 'Admin' || $_SESSION['type'] != 'SuperAdmin'){
-			echo json_encode($this->INCIDENT_MODEL->get_nearest());
+			$nearest_incident = $this->INCIDENT_MODEL->get_nearest();
+			$response = [];
+			foreach($nearest_incident as $incident){
+				$response[] = $this->INFORMANT_MODEL->get_informant($incident->userid);
+			}
+			echo json_encode(array(
+				"incident"=>$nearest_incident,
+				"informant"=>$response
+			));
 		}
+  }
+
+  public function delist(){
+		echo $this->input->post('id');
+		$this->INCIDENT_MODEL->delist($this->input->post('id'));
   }
 }

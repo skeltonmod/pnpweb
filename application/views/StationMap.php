@@ -57,26 +57,46 @@
 
 		map.on('locationerror', onLocationError);
 
+		let url = new URL(window.location.href);
+		let params = new URLSearchParams(url.search);
+		let lat = params.get('lat');
+		let long = params.get('long');
 
-		$.ajax({
-			url: "<?php echo site_url()?>/main/getStation",
-			method: 'post',
-			dataType: 'json',
-			success: function (response){
-				$.each(response.data, function (index, value){
-					let lat = String(value.location).split('/')[0]
-					let long = String(value.location).split('/')[1]
-					L.marker([Number(lat), Number(long)], {
-					}).addTo(map).bindPopup(`${value.station_name}`)
-					L.circle([Number(lat), Number(long)], {
-						color: 'red',
-						fillOpacity: 0.01,
-						radius: 600
-					}).addTo(map)
-				})
-			}
-		})
+		if(params.has('lat') && params.has('long')){
+			let lat = params.get('lat');
+			let long = params.get('long');
+			L.marker([Number(lat), Number(long)], {
+			}).addTo(map).bindPopup(`${value.station_name}`)
+			L.circle([Number(lat), Number(long)], {
+				color: 'red',
+				fillOpacity: 0.01,
+				radius: 600
+			}).addTo(map)
+		}else{
+			$.ajax({
+				url: "<?php echo site_url()?>/main/getStation",
+				method: 'post',
+				dataType: 'json',
+				success: function (response){
+					$.each(response.data, function (index, value){
+						let lat = String(value.location).split('/')[0]
+						let long = String(value.location).split('/')[1]
+						L.marker([Number(lat), Number(long)], {
+						}).addTo(map).bindPopup(`${value.station_name}`)
+						L.circle([Number(lat), Number(long)], {
+							color: 'red',
+							fillOpacity: 0.01,
+							radius: 600
+						}).addTo(map)
+					})
+				}
+			})
+		}
+
+
+
 	})
+
 
 	$(document).on('load', function (){
 		navigator.geolocation.getCurrentPosition(position => {

@@ -131,24 +131,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	let checked_items = []
 	let nearbyIncidentCount = 0;
 
-
-	$(document).ready(function () {
+	function getNearest(){
 		$.ajax({
 			url: "<?php echo site_url()?>/main/getNearest",
 			method: 'post',
 			dataType: 'json',
 			success: function (response) {
-				console.log(response)
-
 				let html = ""
-
 				if (response === 0) {
 					$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
 				} else {
 					if (response.length !== nearbyIncidentCount) {
 						nearbyIncidentCount = response.length;
-						$.each(response, function (index, value) {
-							// console.log(index)
+						$.each(response.incident, function (index, value) {
 							html += `<div class="accordion-item">
     <h2 class="accordion-header" id="${index}_heading">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collpase_${index}" aria-expanded="false" aria-controls="collpase_${index}">
@@ -158,8 +153,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
       <div class="accordion-body">
         <p>An incident nearby has been reported in <strong>${value.barangay}</strong> by: <strong>${value.informant_name}</strong> on <strong>${value.date}</strong></p>
+		<p>Contact Number: <strong>${response.informant[index][0].mobilenumber}</strong></p>
         <p><strong>Station ${value.station}</strong> has been notified</p>
-
+		<a href="<?php echo site_url('main/index/StationMap')?>?lat=${value.latitude}&long=${value.longitude}">Click here to view on map</a>
+		<button onclick="delist(this)" class="btn btn-danger mx-6" id=${value.id}>Acknowledge</button>
       </div>
     </div>
   </div>`
@@ -171,6 +168,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			}
 
 		})
+	}
+	$(document).ready(function () {
+		getNearest();
 
 		$("#tableTempIncident").dataTable({
 			lengthChange: true,
@@ -221,6 +221,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			$(".checked").hide()
 		}
 	})
+
+	function delist(e){
+		$.ajax({
+			url: `<?php echo site_url()?>/main/delist`,
+			method: 'post',
+			dataType: 'json',
+			data: {
+				id: e.id
+			},
+			success: function (response){
+				getNearest()
+			}
+
+		})
+	}
 
 	function moveIncident(mode) {
 
