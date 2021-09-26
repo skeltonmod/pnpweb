@@ -110,6 +110,7 @@ class Excel extends CI_Controller
 		}
 		// CSV writer
 		$csv_writer = new Csv($spreadsheet);
+		$directory = base_url("prediction/");
 		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
 		header('Cache-Control: max-age=0');
 
