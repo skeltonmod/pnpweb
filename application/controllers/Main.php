@@ -22,6 +22,7 @@ class Main extends CI_Controller
 		$this->load->model("STATION_MODEL");
 		$this->load->model("INFORMANT_MODEL");
 		$this->load->model("REPORTS_MODEL");
+		$this->load->helper('file');
 	}
 
 
@@ -72,9 +73,6 @@ class Main extends CI_Controller
 		chmod($location, 0777);
 		return $basename;
 	}
-
-
-
 	// INCIDENT
 	public function getIncidents(){
 		$result = null;
@@ -116,7 +114,7 @@ class Main extends CI_Controller
 		$image = $_FILES['image']['name'];
 
 		$parse_image = $this->getImage($image, "INCIDENT_".$this->input->post('incident_date')."_".$this->input->post('victim'));
-		$station_id = $this->BARANGAY_MODEL->get_barangay_current($this->input->post('location'))[0]->station_id;
+    $station_id = $this->BARANGAY_MODEL->get_barangay_name($this->input->post('location'))[0]->station_id;
 		$data = array(
 			"incident_date"=> $this->input->post('incident_date'),
 			"incident_time"=> $this->input->post('incident_time'),
@@ -134,7 +132,6 @@ class Main extends CI_Controller
 		echo $this->INCIDENT_MODEL->insert_incident($data);
 
 	}
-
 
 	public function manage_incident(){
 		switch ($this->input->post("key")){
@@ -438,10 +435,8 @@ class Main extends CI_Controller
 
 	public function move_incident(){
 		if($this->input->post('mode') == "accept"){
-
 			// Do the Transfer
 			for($i=0; $i < count($this->input->post('items')); ++$i){
-				echo $i;
 				$result = $this->INFORMANT_MODEL->get_incident($this->input->post('items')[$i])[0];
 				$informant = $this->INFORMANT_MODEL->get_informant_name($result->userid)[0];
 				$data = array(
@@ -458,10 +453,11 @@ class Main extends CI_Controller
 					"picture"=>$result->image,
 					"temp_id"=>$this->input->post('items')[$i],
 				);
-
+				// Alert first
+				$this->alertNearest($data);
 //				Insert to other table
 				$this->INCIDENT_MODEL->insert_incident($data);
-				// Change temp incident status
+//				 Change temp incident status
 				$data = array(
 					"status"=>strtoupper("Acknowledged")
 				);
@@ -478,7 +474,6 @@ class Main extends CI_Controller
 				$this->INFORMANT_MODEL->decline_incident($this->input->post('items')[$i], $data);
 			}
 		}
-
 	}
 
 	// Insert Report
@@ -496,7 +491,8 @@ class Main extends CI_Controller
 
 	}
 
-	public function get_report(){
+	public function get_report()
+	{
 		$dateFrom = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('fromMonth').' 01 '. $this->input->post('fromYear'))));
 		$dateTo = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('toMonth').' 01 '. $this->input->post('toYear'))));
 		$result = array();
@@ -534,24 +530,43 @@ class Main extends CI_Controller
 	echo json_encode(['newIncidents'=> $newIncidents]);
   }
 
-  public function getNearestIncident(){
-	$incidents = $this->INFORMANT_MODEL->get_all();
-	$current_station = $this->STATION_MODEL->get_current_station($_SESSION['station_id']);
-	$nearest_incidents = null;
-	foreach ($incidents as $incident){
-		$distance = $this->checkDistance($incident->latitude, $incident->longitude, $current_station[0]->latitude, $current_station[0]->longitude);
-		if($distance <= 5){
-			$nearest_incidents[] = array(
-				"distance" => "~".(intval($distance) != 0 ? intval($distance): number_format($distance, 2))."KM",
-				"incident_id" => $incident->id,
-				"date" => $incident->date,
-				"barangay"=>$incident->barangay
 
-			);
-			
+  public function alertNearest($incident){
+		// basically, get the nearest station from the parameter above
+	  $barangays = $this->STATION_MODEL->get_station();
+	  $distance_list = array();
+	  $station_list = array();
+
+	  foreach ($barangays as $barangay){
+	  	$distance = $this->checkDistance($incident['latitude'], $incident['longitude'], $barangay->latitude, $barangay->longitude);
+	  	$distance_list[] = $distance;
+	  	$station_list[] = $barangay->station_id;
+	  }
+	  $station_id = $station_list[array_search(min($distance_list), $distance_list)];
+
+	  $data = array(
+		  'station_id'=> $station_id,
+		  'incident_id'=>$incident['temp_id']
+	  );
+	  $this->INCIDENT_MODEL->push_nearest_incident($data);
+  }
+
+  public function getNearest(){
+		if($_SESSION['type'] != 'Admin' || $_SESSION['type'] != 'SuperAdmin'){
+			$nearest_incident = $this->INCIDENT_MODEL->get_nearest();
+			$response = [];
+			foreach($nearest_incident as $incident){
+				$response[] = $this->INFORMANT_MODEL->get_informant($incident->userid);
+			}
+			echo json_encode(array(
+				"incident"=>$nearest_incident,
+				"informant"=>$response
+			));
 		}
-	}
+  }
 
-	echo json_encode($nearest_incidents);
+  public function delist(){
+		echo $this->input->post('id');
+		$this->INCIDENT_MODEL->delist($this->input->post('id'));
   }
 }

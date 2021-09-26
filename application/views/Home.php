@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <html lang="en">
 <head>
@@ -14,20 +14,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
 			<li class="nav-item" role="presentation">
-				<button class="nav-link active" id="pills-warning-tab" data-bs-toggle="pill" data-bs-target="#pills-warning" type="button" role="tab" aria-controls="pills-warning" aria-selected="true">Warning</button>
+				<button class="nav-link active" id="pills-warning-tab" data-bs-toggle="pill"
+						data-bs-target="#pills-warning" type="button" role="tab" aria-controls="pills-warning"
+						aria-selected="true">Warning
+				</button>
 			</li>
 			<?php
-			if(isset($_SESSION)){
-				if($_SESSION['type'] != "Standard"){
+			if (isset($_SESSION)) {
+				if ($_SESSION['type'] != "Standard") {
 					echo '<li class="nav-item" role="presentation">
 				<button class="nav-link" id="pills-incident-tab" data-bs-toggle="pill" data-bs-target="#pills-incident" type="button" role="tab" aria-controls="pills-incident" aria-selected="false">User Incidents</button>
 			</li>';
 				}
 			}
 
-			if(isset($_SESSION)){
+			if (isset($_SESSION)) {
 				// Only for station users
-				if($_SESSION['type'] == "Standard"){
+				if ($_SESSION['type'] == "Standard") {
 					echo '<li class="nav-item" role="presentation">
 				<button class="nav-link" id="pills-nearby-tab" data-bs-toggle="pill" data-bs-target="#pills-nearby" type="button" role="tab" aria-controls="pills-nearby" aria-selected="false">Nearby Incidents</button>
 			</li>';
@@ -37,7 +40,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			?>
 		</ul>
 		<div class="tab-content" id="pills-tabContent">
-			<div class="tab-pane fade show active" id="pills-warning" role="tabpanel" aria-labelledby="pills-warning-tab">
+			<div class="tab-pane fade show active" id="pills-warning" role="tabpanel"
+				 aria-labelledby="pills-warning-tab">
 				<div class="card">
 					<div class="card-header">
 						<h4>Welcome to COCPO Incident Reporting</h4>
@@ -45,11 +49,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 					<div class="card-body">
 
-						<p>This page contains a highly confidential information of a person, intended only for the Cagayan de Oro Police Office. If you are not in-charge and responsible to handle this kind of information please exit the page.</p>
+						<p>This page contains a highly confidential information of a person, intended only for the
+							Cagayan de Oro Police Office. If you are not in-charge and responsible to handle this kind
+							of information please exit the page.</p>
 
-						<code>Republic Act No. 10175 Chapter II Sec. 4 of Cybercrime Offenses (1) Illegal Access - The access to the whole or any part of a computer system without right is an punishable act. </code>
+						<code>Republic Act No. 10175 Chapter II Sec. 4 of Cybercrime Offenses (1) Illegal Access - The
+							access to the whole or any part of a computer system without right is an punishable
+							act. </code>
 						<p>
-							But if you are under Cagayan de Oro Police Office, responsible to handle this kind of information please ignore this message.
+							But if you are under Cagayan de Oro Police Office, responsible to handle this kind of
+							information please ignore this message.
 						</p>
 					</div>
 
@@ -58,8 +67,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</div>
 
 			<?php
-			if(isset($_SESSION)){
-				if($_SESSION['type'] != "Standard"){
+			if (isset($_SESSION)) {
+				if ($_SESSION['type'] != "Standard") {
 					echo '<div class="tab-pane fade" id="pills-incident" role="tabpanel" aria-labelledby="pills-incident-tab">
 
 				<div class="card">
@@ -122,20 +131,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	let checked_items = []
 	let nearbyIncidentCount = 0;
 
-	// call it again
-	setInterval(function (){
-		let html = ""
-
-		if(nearbyIncidents === null){
-			$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
-		}else{
-			if(nearbyIncidents.length !== nearbyIncidentCount){
-				nearbyIncidentCount = nearbyIncidents.length;
-				$.each(nearbyIncidents, function (index, value){
-					// console.log(index)
-					html += `
-
-			<div class="accordion-item">
+	function getNearest(){
+		$.ajax({
+			url: "<?php echo site_url()?>/main/getNearest",
+			method: 'post',
+			dataType: 'json',
+			success: function (response) {
+				let html = ""
+				if (response === 0) {
+					$("#nearbyIncident").html(`<h4>There are no Nearby Incidents</h4>`);
+				} else {
+					if (response.length !== nearbyIncidentCount) {
+						nearbyIncidentCount = response.length;
+						$.each(response.incident, function (index, value) {
+							html += `<div class="accordion-item">
     <h2 class="accordion-header" id="${index}_heading">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collpase_${index}" aria-expanded="false" aria-controls="collpase_${index}">
         Incident #${index}
@@ -143,24 +152,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </h2>
     <div id="collpase_${index}" class="accordion-collapse collapse" aria-labelledby="${index}_heading" data-bs-parent="#nearbyIncident">
       <div class="accordion-body">
-        An incident nearby has been reported at approximately <strong>${value.distance}</strong> away, located in <strong>${value.barangay}</strong>
+        <p>An incident nearby has been reported in <strong>${value.barangay}</strong> by: <strong>${value.informant_name}</strong> on <strong>${value.date}</strong></p>
+		<p>Contact Number: <strong>${response.informant[index][0].mobilenumber}</strong></p>
+        <p><strong>Station ${value.station}</strong> has been notified</p>
+		<a href="<?php echo site_url('main/index/StationMap')?>?lat=${value.latitude}&long=${value.longitude}">Click here to view on map</a>
+		<button onclick="delist(this)" class="btn btn-danger mx-6" id=${value.id}>Acknowledge</button>
       </div>
     </div>
-  </div>
-			`
-				})
+  </div>`
+						})
 
-				$("#nearbyIncident").html(html);
+						$("#nearbyIncident").html(html);
+					}
+				}
 			}
-		}
 
+		})
+	}
+	$(document).ready(function () {
+		getNearest();
 
-
-
-
-	}, 2000)
-
-	$(document).ready(function (){
 		$("#tableTempIncident").dataTable({
 			lengthChange: true,
 			responsive: true,
@@ -170,7 +181,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			"ajax": {
 				"url": "<?php echo site_url()?>/main/get_temp_incident",
 			},
-			"columns":[
+			"columns": [
 				{data: "id"},
 				{data: "name"},
 				{data: "barangay"},
@@ -178,53 +189,69 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				{data: "contact"},
 				{data: "date"},
 				{data: "time"},
-				{data: "id",
-					render: function (data){
+				{
+					data: "id",
+					render: function (data) {
 						return `<div class="form-check"><input class="form-check-input" name="checkbox" type="checkbox" value="${data}" id="${data}"></div>`
 					}
 
 				}
 			],
-			'columnDefs':[{
-			"targets": "_all",
-			"defaultContent": "Empty!"
-		}]
+			'columnDefs': [{
+				"targets": "_all",
+				"defaultContent": "Empty!"
+			}]
 
 		})
 
 	})
 
-	$(document).on('click','.form-check-input', function (e){
-		if (this.checked){
+	$(document).on('click', '.form-check-input', function (e) {
+		if (this.checked) {
 			checked_items.push(this.value)
 			console.log(checked_items)
-		}else{
+		} else {
 			checked_items.splice(checked_items.indexOf(this.value), 1)
 			console.log(checked_items)
 		}
 
-		if(document.querySelectorAll('input[name=checkbox]:checked').length > 0){
+		if (document.querySelectorAll('input[name=checkbox]:checked').length > 0) {
 			$(".checked").show()
-		}else{
+		} else {
 			$(".checked").hide()
 		}
 	})
 
-	function moveIncident(mode){
+	function delist(e){
+		$.ajax({
+			url: `<?php echo site_url()?>/main/delist`,
+			method: 'post',
+			dataType: 'json',
+			data: {
+				id: e.id
+			},
+			success: function (response){
+				getNearest()
+			}
 
-		if(checked_items.length > 0){
+		})
+	}
+
+	function moveIncident(mode) {
+
+		if (checked_items.length > 0) {
 			$.ajax({
 				url: "<?php echo site_url()?>/main/move_incident",
 				method: 'post',
 				dataType: 'json',
-				data:{
+				data: {
 					items: checked_items,
 					mode: mode,
 				},
 				success: function (response) {
 					console.log(response)
 				},
-				complete: function (response){
+				complete: function (response) {
 					alert("Record Successfully Edited")
 					$("#tableTempIncident").DataTable().ajax.reload()
 					checked_items = []
@@ -233,7 +260,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			})
 		}
 	}
-
 
 
 </script>

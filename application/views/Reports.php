@@ -317,7 +317,7 @@
 
 	$("#saveBtn").on('click', function (e){
 		let formData = new FormData(document.getElementById('frmAddReports'));
-
+		alert("Incident Successfully Saved!");
 		$.ajax({
 			url: `<?php echo site_url()?>/main/insert_report`,
 			method: 'post',
@@ -327,7 +327,7 @@
 			data: formData,
 			success: function (response){
 				$('#showState').text("Successfully Saved");
-				alert("Incident Successfully Saved!");
+        alert("Incident Successfully Saved!");
 			}
 		})
 	});

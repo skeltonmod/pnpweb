@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 21, 2021 at 11:18 AM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.4.16
+-- Generation Time: Sep 09, 2021 at 01:20 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.4.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -63,7 +63,11 @@ CREATE TABLE `incidents` (
 INSERT INTO `incidents` (`incident_no`, `incident_date`, `incident_time`, `latitude`, `longitude`, `location`, `suspect`, `victim`, `police_station_no`, `personnel_id`, `informant_id`, `remarks`, `picture`, `category_id`, `temp_id`) VALUES
 (1, '2021-07-08', '09:52', 8.460826522987542, 124.61242675781251, 'Pagatpat', '', 'Elijah Abgao', 7, 1, 71542733, '', 'INCIDENT_71542733_Informant.png', NULL, 1),
 (2, '2021-07-08', '10:52', 8.477126318644498, 124.66392517089845, 'Lapasan', '', 'Elijah Abgao', 3, 1, 71542733, '', 'INCIDENT_71542733_Victim.jpg', NULL, 2),
-(3, '2021-07-08', '09:53', 8.443167632646192, 124.6278762817383, 'Balulang', 'Brann', 'Elijah', 2, 2000, 1000, '', 'INCIDENT_2021-07-08_Elijah.png', NULL, NULL);
+(3, '2021-07-08', '09:53', 8.443167632646192, 124.6278762817383, 'Balulang', 'Brann', 'Elijah', 2, 2000, 1000, '', 'INCIDENT_2021-07-08_Elijah.png', NULL, NULL),
+(4, '2021-09-05', '21:49', 8.486761549994656, 124.64962363243104, 'Barangay 25', '', 'Elijah Abgao', 5, 1, 71542733, '', 'INCIDENT_71542733_Victim.jpg', NULL, 4),
+(5, '2021-09-09', '18:57', 8.488247136846821, 124.62852001190187, 'Patag', '', 'Elijah Abgao', 4, 1, 71542733, '', 'INCIDENT_71542733_Victim.jpg', NULL, 5),
+(6, '2021-09-09', '19:10', 8.487058667824936, 124.6282196044922, 'Patag', '', 'Quinto Tan', 4, 1, 21547799, '', 'INCIDENT_21547799_Victim.jpg', NULL, 6),
+(7, '2021-09-09', '19:10', 8.487058667824936, 124.6282196044922, 'Patag', '', 'Quinto Tan', 4, 1, 21547799, '', 'INCIDENT_21547799_Victim.jpg', NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -88,7 +92,11 @@ INSERT INTO `incident_details` (`unique_id`, `incident_no`, `status`, `datetime_
 (3, 3, 'NEW', '2021-07-08 00:00:00'),
 (4, 1, 'ON-GOING', '0000-00-00 00:00:00'),
 (5, 3, 'ON-GOING', '0000-00-00 00:00:00'),
-(6, 3, 'PENDING', '2021-07-08 00:00:00');
+(6, 3, 'PENDING', '2021-07-08 00:00:00'),
+(7, 4, 'NEW', '2021-09-05 00:00:00'),
+(8, 5, 'NEW', '2021-09-09 00:00:00'),
+(9, 6, 'NEW', '2021-09-09 00:00:00'),
+(10, 7, 'NEW', '2021-09-09 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -125,7 +133,7 @@ CREATE TABLE `informants` (
 --
 
 INSERT INTO `informants` (`id`, `userid`, `firstname`, `suffix`, `lastname`, `middlename`, `email`, `password`, `citizenship`, `civilstatus`, `dob`, `educ`, `gender`, `mobilenumber`, `nickname`, `pob`, `currentaddress`, `homeaddress`, `occupation`, `workaddress`, `image`) VALUES
-(1, 71542733, 'Elijah', 'Mr', 'Abgao', 'Manginsay', 'abgaoe@gmail.com', 'malim890', 'Foo', 'Single', '1999-08-18', 'Foo', 'Male', '09953875103', 'Elijah', 'Pa', 'Foo, Foo, Fo, 9000', 'Foo, Foo, Fo, 9000', 'Foo', 'Foo', 'INFORMANT_71542733.png'),
+(1, 71542733, 'Elijah', 'Mr', 'Abgao', 'Manginsay', 'abgaoe@gmail.com', 'malim890', 'Foo', 'Single', '1999-08-18', 'Foo', 'Male', '09953875103', 'Elijah', 'Pa', 'Foo, Foo, Fo, 9000', 'Foo, Foo, Fo, 9000', 'Foo', 'Foo', 'INFORMANT_71542733.jpg'),
 (2, 21547799, 'Quinto', 'Mr', 'Tan', 'Suico', 'juntan@yahoo.com', 'malim890', 'Filipino', 'Married', '1999-08-18', 'College', 'Male', '09953875103', 'Quinto', 'Cagayan', 'Carmen, Cagayan, Misamis Oriental, 9000', 'Carmen, Cagayan, Misamis Oriental, 9000', 'Teacher', 'Cagayan', 'INFORMANT_21547799.png');
 
 -- --------------------------------------------------------
@@ -155,7 +163,10 @@ INSERT INTO `personnel` (`personnel_id`, `fname`, `lname`, `mname`, `email`, `ad
 (1, 'Elijah', 'Abgao', 'Manginsay', 'abgaoe@gmail.com', 'balay', '1999-08-18', 'malim890', 7, 'SuperAdmin'),
 (2, 'Trivanny', 'Suico', 'Zabate', 'suico@gmail.com', 'Cagayan', '2008-02-05', '123', 4, 'Standard'),
 (3, 'Jun', 'Tan', 'Suico', 'jun@gmail.com', 'Balay', '1999-08-18', '123', 2, 'Standard'),
-(4, 'Brann', 'Boyboy', 'Rezon', 'yobyob@gmail.com', 'Balulang', '2021-07-08', '123', 2, 'Admin');
+(4, 'Brann', 'Boyboy', 'Rezon', 'yobyob@gmail.com', 'Balulang', '2021-07-08', '123', 2, 'Admin'),
+(5, 'Station', 'Seven', 'Seven', 's7@gmail.com', 'Balay', '1999-08-18', '1234', 7, 'Standard'),
+(7, 'Station', 'Payb', '', 's5@gmail.com', 'Balay', '2021-09-05', '1234', 5, 'Standard'),
+(8, 'Station', 'Tree', '', 's3@gmail.com', 'S3', '2021-09-05', '1234', 3, 'Standard');
 
 -- --------------------------------------------------------
 
@@ -4903,7 +4914,34 @@ CREATE TABLE `temp_incidents` (
 
 INSERT INTO `temp_incidents` (`id`, `userid`, `informant_name`, `type`, `latitude`, `longitude`, `date`, `time`, `barangay`, `station`, `image`, `status`) VALUES
 (1, 71542733, 'Elijah Abgao', 'Informant', '8.460826522987542', '124.61242675781251', '2021-07-08', '09:52', 'Pagatpat', '7', 'INCIDENT_71542733_Informant.png', 'ON-GOING'),
-(2, 71542733, 'Elijah Abgao', 'Victim', '8.477126318644498', '124.66392517089845', '2021-07-08', '10:52', 'Lapasan', '3', 'INCIDENT_71542733_Victim.jpg', 'ACKNOWLEDGED');
+(2, 71542733, 'Elijah Abgao', 'Victim', '8.477126318644498', '124.66392517089845', '2021-07-08', '10:52', 'Lapasan', '3', 'INCIDENT_71542733_Victim.jpg', 'ACKNOWLEDGED'),
+(3, 71542733, 'Elijah Abgao', 'Informant', '8.496651205620692', '124.62298393249513', '2021-09-01', '18:48', 'Patag', '4', 'INCIDENT_71542733_Informant.jpg', 'Reject'),
+(4, 71542733, 'Elijah Abgao', 'Victim', '8.486761549994656', '124.64962363243104', '2021-09-05', '21:49', 'Barangay 25', '5', 'INCIDENT_71542733_Victim.jpg', 'ACKNOWLEDGED'),
+(5, 71542733, 'Elijah Abgao', 'Victim', '8.488247136846821', '124.62852001190187', '2021-09-09', '18:57', 'Patag', '4', 'INCIDENT_71542733_Victim.jpg', 'ACKNOWLEDGED'),
+(6, 21547799, 'Quinto Tan', 'Victim', '8.487058667824936', '124.6282196044922', '2021-09-09', '19:10', 'Patag', '4', 'INCIDENT_21547799_Victim.jpg', 'ACKNOWLEDGED'),
+(7, 21547799, 'Quinto Tan', 'Victim', '8.487058667824936', '124.6282196044922', '2021-09-09', '19:10', 'Patag', '4', 'INCIDENT_21547799_Victim.jpg', 'ACKNOWLEDGED');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temp_nearest_station`
+--
+
+CREATE TABLE `temp_nearest_station` (
+  `id` int(11) NOT NULL,
+  `station_id` int(11) NOT NULL,
+  `incident_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `temp_nearest_station`
+--
+
+INSERT INTO `temp_nearest_station` (`id`, `station_id`, `incident_id`, `status`) VALUES
+(1, 7, 5, 0),
+(2, 7, 6, 1),
+(3, 7, 7, 1);
 
 --
 -- Indexes for dumped tables
@@ -4958,6 +4996,12 @@ ALTER TABLE `temp_incidents`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `temp_nearest_station`
+--
+ALTER TABLE `temp_nearest_station`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -4965,13 +5009,13 @@ ALTER TABLE `temp_incidents`
 -- AUTO_INCREMENT for table `incidents`
 --
 ALTER TABLE `incidents`
-  MODIFY `incident_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `incident_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `incident_details`
 --
 ALTER TABLE `incident_details`
-  MODIFY `unique_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `unique_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `informants`
@@ -4983,7 +5027,7 @@ ALTER TABLE `informants`
 -- AUTO_INCREMENT for table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `personnel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `personnel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -5007,7 +5051,13 @@ ALTER TABLE `stations_coverage`
 -- AUTO_INCREMENT for table `temp_incidents`
 --
 ALTER TABLE `temp_incidents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `temp_nearest_station`
+--
+ALTER TABLE `temp_nearest_station`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
