@@ -167,6 +167,7 @@ class Main extends CI_Controller
 
 				$this->INCIDENT_MODEL->edit_incident($data, $this->input->post("id"));
 				$this->INCIDENT_MODEL->edit_incident_detail($data_details);
+
 				// Edit the temp_incident for mobile users
 				if($this->input->post('temp_id') != null){
 					$this->INFORMANT_MODEL->edit_temp_incident($this->input->post('temp_id'), $temp_data_details);
@@ -183,7 +184,7 @@ class Main extends CI_Controller
 				$temp_id = $this->INCIDENT_MODEL->get_current_incident($this->input->post('id'))[0]->temp_id;
 				$temp_data_details = array(
 					"incident_no"=> $this->input->post('id'),
-					"status"=>"ON-GOING"
+					"status"=>"ACKNOWLEDGED"
 				);
 				$data_details = array(
 					"status"=>"ON-GOING"
@@ -398,6 +399,8 @@ class Main extends CI_Controller
 
 		if($data != null){
 			foreach ($data as $row){
+				// echo json_encode($row);
+
 				$location_name = $this->INFORMANT_MODEL->get_station_data($row->barangay)[0]->barangay_name;
 				$contact = $this->INFORMANT_MODEL->get_informant($row->userid)[0]->mobilenumber;
 				$result[] = array(
@@ -411,7 +414,6 @@ class Main extends CI_Controller
 					"station"=>$row->station,
 					"contact"=>$contact,
 					"image"=>$row->image,
-
 				);
 			}
 		}else{

@@ -14,7 +14,8 @@
 		"php": ">=7.4",
       "ext-json": "*",
       "ext-gd": "*",
-		"phpoffice/phpspreadsheet": "^1.18"
+		"phpoffice/phpspreadsheet": "^1.18",
+		"sendinblue/api-v3-sdk": "8.x.x"
     },
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

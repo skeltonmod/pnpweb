@@ -232,6 +232,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			},
 			success: function (response){
 				getNearest()
+			},
+			complete: function(){
+				alert("Successfully Acknowledged!");
+				location.reload();
 			}
 
 		})

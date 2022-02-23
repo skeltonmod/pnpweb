@@ -11,13 +11,23 @@ class Informants extends CI_Controller
 	}
 
 
-	// Mobile Endpoint
+	public function get_all_informants(){
+		$response = array([
+			'data'=>$this->INFORMANT_MODEL->Get_all_informants()
+		]);
+
+		echo json_encode($response[0]);
+	}
+
+
+	function verify_user(){
+		$this->INFORMANT_MODEL->verify_user($this->input->post('id'));
+	}
 
 	function generateString($key){
 		$n = 8;
 		$characters = ($key === "password") ? '0123456789': "123456789";
 		$randomString = '';
-
 		for ($i = 0; $i < $n; $i++) {
 			$index = rand(0, strlen($characters) - 1);
 			$randomString .= $characters[$index];
@@ -133,6 +143,7 @@ class Informants extends CI_Controller
 		echo json_encode($this->INFORMANT_MODEL->get_informant($this->input->post("userid")));
 	}
 
+
 	public function edit_informant(){
 		$image = (isset($_FILES['image']['name']) ? $_FILES['image']['name'] : null);
 
@@ -195,7 +206,7 @@ class Informants extends CI_Controller
 			"time"=>$this->input->post('time'),
 			"barangay"=>$this->input->post('barangay'),
 			"station"=>$station_id,
-			"image"=>$parse_image,
+			"image"=>$parse_image
 
 		);
 

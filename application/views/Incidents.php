@@ -136,12 +136,12 @@
 								<div class="mb-3">
 									<label> Incident Date </label>
 									<label for="edit_incident_date"></label><input type="date" class="form-control" name="incident_date"
-																				   id="edit_incident_date" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+								id="edit_incident_date" /><!-- <?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?> -->
 								</div>
 								<div class="mb-3">
 									<label> Incident Time </label>
 									<label for="edit_incident_time"></label><input type="time" class="form-control" name="incident_time"
-																				   id="edit_incident_time" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									id="edit_incident_time" /> <!-- <?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?> -->
 								</div>
 								<div class="mb-3">
 									<label for="edit_remarks">Status</label>
@@ -155,7 +155,7 @@
 
 								<div class="mb-3">
 									<label for="edit_suspect">Remarks</label><input type="text" class="form-control"
-																					name="remarks" id="edit_remarks"
+																name="remarks" id="edit_remarks"
 																					placeholder="Remarks"/>
 								</div>
 
@@ -167,8 +167,8 @@
 
 								<div class="mb-3">
 									<label for="edit_victim">Victim</label><input type="text" class="form-control"
-																				  name="victim" id="edit_victim"
-																				  placeholder="Victim" <?php if ($_SESSION['type'] == "Standard") echo "readonly"; ?>/>
+									name="victim" id="edit_victim"
+									placeholder="Victim" /> <!-- <?php //if ($_SESSION['type'] == "Standard") echo "readonly"; ?> -->
 								</div>
 
 								<div class="mb-3">
@@ -242,15 +242,25 @@
 					}
 				},
 				{
-					data: "id",
+					data: {id: "id", "status": status},
 					render: function (data) {
 						if(data !== "Empty Data!"){
-							return `<button type="button" onclick="manageData(${data}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary">Edit</button>
-								<button type="button" onclick="manageData(${data}, 'acknowledge')" class="btn btn-primary">Acknowledge</button>
+							console.log(data);
+							if(data.status !== "ON-GOING"){
+								return `<button type="button" onclick="manageData(${data.id}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary">Edit</button>
+								<button type="button" onclick="manageData(${data.id}, 'acknowledge')" class="btn btn-primary" disabled>Acknowledge</button>
 								<?php if ($_SESSION['type'] == "SuperAdmin") {
-								echo '<button type="button" onclick="manageData(${data}, \'delete\')" class="btn btn-primary">Delete</button>';
+								echo '<button type="button" onclick="manageData(${data.id}, \'delete\')" class="btn btn-primary">Delete</button>';
 							}
 							?>`
+						}else{
+							return `<button type="button" onclick="manageData(${data.id}, 'edit')" data-bs-toggle="modal" data-bs-target="#editIncidentModal" class="btn btn-primary" disabled>Edit</button>
+								<button type="button" onclick="manageData(${data.id}, 'acknowledge')" class="btn btn-primary">Acknowledge</button>
+								<?php if ($_SESSION['type'] == "SuperAdmin") {
+								echo '<button type="button" onclick="manageData(${data.id}, \'delete\')" class="btn btn-primary">Delete</button>';
+							}
+							?>`
+						}
 						}else{
 							return 'Empty!'
 						}
@@ -317,7 +327,7 @@
 			processData: false,
 			data: formData,
 			success: function (response) {
-				console.log(response)
+				//console.log(response)
 				alert("Incident Edited Successfully")
 			},
 
@@ -349,12 +359,14 @@
 				switch (key) {
 					case "edit":
 						let data = response[0]
-						console.log(data.incident_date)
+						console.log(data.status)
 						$("#edit_incident_date").val(data.incident_date)
 						$("#edit_incident_time").val(data.incident_time)
 						$("#edit_suspect").val(data.suspect)
 						$("#edit_victim").val(data.victim)
-						$("#edit_status").val(data.status)
+						$("#edit_status").val(data.status).change()
+						// document.getElementById('edit_status').value = data.status;
+						$("#edit_remarks").val(data.remarks)
 						$("#edit_latitude").val(data.latitude)
 						$("#edit_longitude").val(data.longitude)
 						$("#edit_location").val(data.location)

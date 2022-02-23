@@ -166,14 +166,14 @@
 									<label>
 										Barangay Name
 									</label>
-									<input type="text" class="form-control" name="barangay_name" id="editbarangay_name" placeholder="Barangay Name" />
+									<input type="text" class="form-control" name="barangay_name" id="editbarangay_name" placeholder="Barangay Name"/>
 								</div>
 
 								<div class="mb-3">
 									<label>
 										Canonical Name
 									</label>
-									<input type="text" class="form-control" name="canonical_name" id="editlocation" placeholder="Canonical Name" />
+									<input type="text" class="form-control" name="canonical_name" id="editlocation" placeholder="Canonical Name"/>
 								</div>
 
 								<div class="mb-3">
@@ -303,8 +303,8 @@
 				switch (key){
 					case "edit":
 						let data = response[0]
-						$("#editlocation").val(data.barangay_name)
-						$("#editbarangay_name").val(data.canonical_name)
+						$("#editlocation").val(data.canonical_name)
+						$("#editbarangay_name").val(data.barangay_name)
 						$("#editlatitude").val(data.lat)
 						$("#editlongitude").val(data.long)
 						$("#editremarks").val(data.remarks)

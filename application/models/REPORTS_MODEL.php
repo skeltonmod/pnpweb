@@ -20,6 +20,8 @@ class REPORTS_MODEL extends CI_Model
 		return $query->result();
 	}
 
+	
+
 
 	public function search_reports($data){
 		$this->db->select("reports.month, reports.year, reports.incidents, reports.id, stations_coverage.barangay_name, stations_coverage.canonical_name");

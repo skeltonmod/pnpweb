@@ -48,12 +48,24 @@ class INFORMANT_MODEL extends CI_Model
 		return $query->result();
 	}
 
+	public function Get_all_informants(){
+		$this->db->select("*");
+		$this->db->from("informants");
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function get_informant_name($id){
 		$this->db->select("firstname, middlename, lastname");
 		$this->db->from("informants");
 		$this->db->where("userid", $id);
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	public function verify_user($id){
+		$this->db->where("userid", $id);
+		$this->db->update("informants", ['verified'=> 1]);
 	}
 
 	public function edit_informant($data, $id){

@@ -13,6 +13,7 @@ class Excel extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model("REPORTS_MODEL");
+		$this->load->model('prediction_model');
 	}
 
 	public function setHead($from, $to)
@@ -111,10 +112,22 @@ class Excel extends CI_Controller
 		// CSV writer
 		$csv_writer = new Csv($spreadsheet);
 		$directory = base_url("prediction/");
-		header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
-		header('Cache-Control: max-age=0');
+		// header('Content-Disposition: attachment;filename="'. $filename .'.csv"');
+		// header('Cache-Control: max-age=0');
 
-		$csv_writer->save('php://output');
+		$csv_writer->save($filename . '.csv');
+		// $command = escapeshellcmd('');
+		$output = shell_exec("python C:/xampp/htdocs/pnpweb/single_prediction.py");
+		echo $output;
+
+		// Automatic
+		$data = array(
+			'barangay_id' => $barangay,
+			'month' => $month,
+			'year' => $year,
+			'predicted_number' => $output
+		);
+		$this->prediction_model->Insert_prediction($data);
 	}
 
 }

@@ -13,15 +13,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel">Number of Incidents Entry Form</h5>
+						
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="row">
-
 							<div class="col">
 								<form id='frmAddReports'>
-
 									<div class="mb-3">
 										<label for="findMonth">
 											Month
@@ -71,7 +70,6 @@
 				</div>
 			</div>
 		</div>
-
 		<!--Modal Add Predicted Incidents -->
 		<div class="modal fade" id="Modal_addPredictedIncident" tabindex="-1" role="dialog" aria-labelledby="AddLabel" aria-hidden="true">
 			<div class="modal-dialog " role="document">
@@ -137,6 +135,97 @@
 			</div>
 		</div> <!-- END of Add Predicted Incident Modal -->
 
+		<!--Modal View top barangays -->
+		<div class="modal fade" id="view_top" tabindex="-1" role="dialog" aria-labelledby="ViewModal" aria-hidden="true">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Highest number of crimes per barangay</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+
+							<div class="col">
+								<form id='pred_frmAddReports'>
+
+									<div class="mb-3">
+										<label for="findMonth">
+											Month
+										</label>
+										<select name="month" id="topMonth"  class="form-select">
+											<option value="January">January</option>
+											<option value="February">February</option>
+											<option value="March">March</option>
+											<option value="April">April</option>
+											<option value="May">May</option>
+											<option value="June">June</option>
+											<option value="July">July</option>
+											<option value="August">August</option>
+											<option value="September">September</option>
+											<option value="October">October</option>
+											<option value="November">November</option>
+											<option value="December">December</option>
+										</select>
+									</div>
+
+									<div class="mb-3"> <!-- Add No. of Incidents -->
+										<label for="findYear">Year</label><select name="year" id="pred_addYear" class="form-select">
+											<option value="2021">2021</option>
+											<option value="2022">2022</option>
+										</select>
+									</div>
+									<label for="findBarangay">
+									Number of Barangays to be shown
+								</label>
+									<div class="mb-3">
+										<select name="numberList" id="numberList" class="form-select">  
+										  <option value="5">5</option>
+										  <option value="10">10</option>
+										  <option value="15">15</option>
+										  <option value="20">20</option>
+										</select>
+									</div>
+									<div class="mb-3">
+										<table class="table">
+										  <thead>
+										    <tr>
+										      <th scope="col">Barangay Name</th>
+										      <th scope="col">Predicted Value</th>
+										    </tr>
+										  </thead>
+										  <tbody id="tbl_fetch">
+										    <!-- <tr>
+										      <td>Mark</td>
+										      <td>Otto</td>
+										      <td>@mdo</td>
+										    </tr>
+										    <tr>
+										      <td>Jacob</td>
+										      <td>Thornton</td>
+										      <td>@fat</td>
+										    </tr>
+										    <tr>
+										      <td>Larry</td>
+										      <td>the Bird</td>
+										      <td>@twitter</td>
+										    </tr> -->
+										  </tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" id="btn_fetch" class="btn btn-primary">Fetch</button>
+					</div>
+				</div>
+			</div>
+		</div> <!-- END of Modal View top barangays -->
+
 		<div class="row">
 			<ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
 				<li class="nav-item" role="presentation">
@@ -187,8 +276,8 @@
 									</label>
 									<select name="barangay" id="findBarangay"  class="form-select">
 									</select>
-
 								</div>
+								
 								<div class="mb-3 row">
 									<div class="col-sm-1 mb-3">
 										<button type="button" name="predict" id="predict" class="btn btn-primary">Predict</button>
@@ -196,8 +285,13 @@
 									<div class="col-sm-3">
 										<button type="button" id="addBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReportsModal">Add No. of Incidents</button>
 									</div>
-									<div>
+									<!--
+									<div class="col-sm-3">
 										<button type="button" id="btnAdd_predicted_incidents" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal_addPredictedIncident">Add Predicted Incidents</button>
+									</div>
+									-->
+									<div class="col-sm-3">
+										<button type="button" id="btn_view_top" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view_top">View Top Incidents/Barangay</button>
 									</div>
 								</div>
 
@@ -288,11 +382,9 @@
 </body>
 
 <script>
-
+	let exists = false;
 	$(document).ready(function(){
 		let date = new Date();
-
-
 		//adding value to select year
 		for(let i = 0; i < 2; i++){ 
 			let curr_year = date.getFullYear();
@@ -300,8 +392,6 @@
 												${ curr_year + i }
 								    </option>`)
 		}
-			
-		
 		$.ajax({
 			url: "<?php echo site_url()?>/main/getBarangay",
 			method: 'post',
@@ -317,7 +407,7 @@
 
 	$("#saveBtn").on('click', function (e){
 		let formData = new FormData(document.getElementById('frmAddReports'));
-		alert("Incident Successfully Saved!");
+		
 		$.ajax({
 			url: `<?php echo site_url()?>/main/insert_report`,
 			method: 'post',
@@ -326,10 +416,11 @@
 			processData: false,
 			data: formData,
 			success: function (response){
-				$('#showState').text("Successfully Saved");
-        alert("Incident Successfully Saved!");
+				
 			}
 		})
+		$('#addIncidents').val("");
+		alert("Record Successfully Saved");
 	});
 
 	$("#searchBtn").on('click', function (e){
@@ -369,16 +460,77 @@
 		}
 
 		window.location.href = `<?php echo site_url()?>/excel/index?data=${JSON.stringify(data)}`
+
 	})
 
-	$("#predict").on('click', function (e){
-		alert("<?php //echo base_url() ?>");
-		let data = {
+	function check_predicted_value(){
+		let mnth = $('#findMonth').val();
+		let yr = $('#findYear').val();
+		let brgy = $('#findBarangay').val().split("_");
+		let brgy_id = brgy[0];
+		$.ajax({
+			url: `<?php echo site_url() ?>/prediction/IsPredictedExist`,
+			method: 'post',
+			dataType: "json",
+			data: {barangay_id: brgy_id, year: yr, month: mnth},
+			success: function(response){
+				if(response.exists){
+					alert(response.incident_data[0].predicted_number)
+					console.log(response.incident_data);
+				}else{
+					let data = {
 			"date": `${$("#findMonth").val()}_01_${$("#findYear").val()}`,
 			"barangay": `${$("#findBarangay").val()}`
 		}
-		window.location.href = `<?php echo site_url()?>/excel/csv?data=${JSON.stringify(data)}`
-	})
+		
+		$.get({
+			url: `<?php echo site_url() ?>/excel/csv`,
+			data:{
+				data: JSON.stringify(data)
+			},
+			success: function(response){
+				alert(response);
+			}
+		});
+				}
+			},
+		});
+	}
+
+	$("#btn_fetch").on('click', function(e){
+		$.ajax({
+			url: `<?php echo site_url() ?>/prediction/getTopData`,
+			method: 'post',
+			dataType: "json",
+			data: {month: $("#topMonth").val(), year: $("#findYear").val(), limit: $("#numberList").val()},
+			success: function(response){
+				const data = response;
+				let html = '';
+				$.each(data, function(index, item){
+					// <td>${item.predicted_}</td>
+					html += `<tr>
+								<td>${item.canonical_name}</td>
+								<td>${item.predicted_number}</td>
+							</tr>`
+				})
+
+				$("#tbl_fetch").html(html);
+			}
+		})
+	});
+
+
+	$("#predict").on('click', function (e){
+		check_predicted_value();
+		// if(exists){
+		// 	console.log(`Bool? ${exists}`);
+		// 	alert('Prediction exists!');
+		// 	return false;
+		// }
+		
+	});
+
+
 
 	$('#pred_saveBtn').on('click', function(e){
 		e.preventDefault();
@@ -395,6 +547,7 @@
 			data: {month: mnths, year: yr, barangay_id: brgy_id, barangay_name: brgy_nm, predicted_number: pred_num},
 			success: function(result){
 				alert("Successfully Saved!");
+				$('#pred_addIncidents').val("");
 			}
 		});
 	})
